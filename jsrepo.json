@@ -1,0 +1,8 @@
+{
+  "$schema": "https://unpkg.com/jsrepo@latest/schemas/jsrepo-build-config.json",
+  "repos": ["github/react-bits/react-bits"],
+  "path": "src/components/react-bits",
+  "includeTests": false,
+  "watermark": true
+}
+
