@@ -30,7 +30,7 @@ export function ImagePlaceholder({
     <div
       className={`
         relative w-full overflow-hidden
-        bg-gradient-to-br from-stone-200 via-stone-100 to-stone-200
+        bg-gradient-to-br from-border via-surface to-border
         ${aspectRatios[aspectRatio]}
         ${className}
       `}
@@ -40,8 +40,8 @@ export function ImagePlaceholder({
         className="absolute inset-0 opacity-30"
         style={{
           backgroundImage: `
-            radial-gradient(circle at 20% 50%, rgba(176, 137, 104, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(168, 162, 158, 0.15) 0%, transparent 40%)
+            radial-gradient(circle at 20% 50%, rgba(137, 122, 95, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(90, 94, 88, 0.15) 0%, transparent 40%)
           `,
         }}
       />
@@ -49,7 +49,7 @@ export function ImagePlaceholder({
       {/* Optional label */}
       {label && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-small text-stone-400 tracking-widest">
+          <span className="text-small text-muted tracking-widest">
             {label}
           </span>
         </div>

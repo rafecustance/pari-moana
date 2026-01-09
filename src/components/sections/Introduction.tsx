@@ -65,7 +65,7 @@ export function Introduction() {
   return (
     <section 
       ref={sectionRef}
-      className="bg-stone-100 py-24 md:py-40"
+      className="bg-surface py-24 md:py-40"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
         {/* Playful staggered headline - Hillbrook style */}
@@ -79,13 +79,13 @@ export function Introduction() {
             style={{ opacity: prefersReducedMotion ? 1 : 0 }}
           >
             <span 
-              className="font-display font-light text-stone-900"
+              className="font-display font-light text-heading"
               style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
             >
               Your{' '}
             </span>
             <span 
-              className="font-display font-light italic text-stone-900"
+              className="font-display font-light italic text-heading"
               style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
             >
               luxury escape
@@ -98,13 +98,13 @@ export function Introduction() {
             style={{ opacity: prefersReducedMotion ? 1 : 0 }}
           >
             <span 
-              className="font-display font-light text-stone-900"
+              className="font-display font-light text-heading"
               style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
             >
               to{' '}
             </span>
             <span 
-              className="font-display font-light italic text-stone-900"
+              className="font-display font-light italic text-heading"
               style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
             >
               disconnect
@@ -117,13 +117,13 @@ export function Introduction() {
             style={{ opacity: prefersReducedMotion ? 1 : 0 }}
           >
             <span 
-              className="font-display font-light text-stone-900"
+              className="font-display font-light text-heading"
               style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
             >
               and{' '}
             </span>
             <span 
-              className="font-display font-light italic text-stone-900"
+              className="font-display font-light italic text-heading"
               style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
             >
               reconnect
@@ -137,7 +137,10 @@ export function Introduction() {
           className="mt-12 md:mt-16 ml-auto max-w-lg md:max-w-md lg:max-w-lg"
           style={{ opacity: prefersReducedMotion ? 1 : 0 }}
         >
-          <p className="text-stone-600 text-base md:text-lg leading-relaxed">
+          <p 
+            className="text-foreground text-base md:text-lg leading-relaxed"
+            style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
+          >
             Pari Moana is a luxury waterfront estate nestled on New Zealand's stunning coastline. 
             Available for exclusive private stays, this architectural retreat offers the perfect 
             setting for those seeking space, beauty, and absolute tranquility.
@@ -147,10 +150,10 @@ export function Introduction() {
             href="/the-home"
             className="inline-flex items-center gap-3 mt-8 group"
           >
-            <span className="text-sm font-medium tracking-widest text-stone-900 uppercase">
+            <span className="text-sm font-medium tracking-widest text-heading uppercase">
               Book now
             </span>
-            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-bronze text-white transition-transform duration-300 group-hover:translate-x-1">
+            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-accent text-on-image transition-transform duration-300 group-hover:translate-x-1">
               <svg 
                 width="14" 
                 height="14" 

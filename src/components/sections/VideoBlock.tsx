@@ -67,7 +67,7 @@ export function VideoBlock({
   );
 
   return (
-    <section className="bg-stone-100 pb-24 md:pb-40">
+    <section className="bg-surface pb-24 md:pb-40">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
         <div
           ref={containerRef}
@@ -90,7 +90,7 @@ export function VideoBlock({
           {/* Play/Pause button - bottom right */}
           <button
             onClick={togglePlay}
-            className="absolute bottom-4 right-4 md:bottom-6 md:right-6 flex items-center justify-center w-12 h-12 rounded-full bg-stone-900/80 backdrop-blur-sm text-white hover:bg-stone-900 transition-colors duration-300"
+            className="absolute bottom-4 right-4 md:bottom-6 md:right-6 flex items-center justify-center w-12 h-12 rounded-full bg-heading/80 backdrop-blur-sm text-on-image hover:bg-heading transition-colors duration-300"
             aria-label={isPlaying ? 'Pause video' : 'Play video'}
           >
             {isPlaying ? (

@@ -63,14 +63,34 @@ export function Navigation() {
       {/* Navigation pill */}
       <nav
         ref={pillRef}
-        className="flex items-center gap-2 px-2 py-2 rounded-full bg-stone-50/95 backdrop-blur-md shadow-lg shadow-stone-900/5 border border-stone-200/50"
+        className="flex items-center gap-2 px-2 py-2 rounded-full bg-background/95 backdrop-blur-md shadow-lg shadow-heading/5 border border-border/50"
+        style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
       >
         {/* Logo */}
         <a 
           href="/" 
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors duration-300 shrink-0"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-surface hover:bg-border transition-colors duration-300 shrink-0"
         >
-          <span className="font-display text-lg text-stone-800">PM</span>
+          <svg 
+            width="24" 
+            height="24" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            className="text-heading"
+          >
+            <path 
+              d="M12 2L2 7v10l10 5 10-5V7L12 2z" 
+              stroke="currentColor" 
+              strokeWidth="1.5" 
+              strokeLinejoin="round"
+            />
+            <path 
+              d="M12 22V12M2 7l10 5 10-5" 
+              stroke="currentColor" 
+              strokeWidth="1.5" 
+              strokeLinejoin="round"
+            />
+          </svg>
         </a>
 
         {/* Nav links - collapses horizontally */}
@@ -81,19 +101,19 @@ export function Navigation() {
         >
           <a 
             href="/the-home" 
-            className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 transition-colors duration-300 whitespace-nowrap"
+            className="px-4 py-2 text-sm text-foreground hover:text-heading transition-colors duration-300 whitespace-nowrap"
           >
             The Home
           </a>
           <a 
             href="/gallery" 
-            className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 transition-colors duration-300 whitespace-nowrap"
+            className="px-4 py-2 text-sm text-foreground hover:text-heading transition-colors duration-300 whitespace-nowrap"
           >
             Gallery
           </a>
           <a 
             href="/location" 
-            className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 transition-colors duration-300 whitespace-nowrap"
+            className="px-4 py-2 text-sm text-foreground hover:text-heading transition-colors duration-300 whitespace-nowrap"
           >
             Location
           </a>
@@ -102,7 +122,7 @@ export function Navigation() {
         {/* CTA button */}
         <a
           href="/enquiry"
-          className="px-5 py-2.5 text-sm font-medium text-stone-50 bg-stone-900 rounded-full hover:bg-stone-800 transition-colors duration-300 whitespace-nowrap shrink-0"
+          className="px-5 py-2.5 text-sm font-medium text-on-image bg-heading rounded-full hover:bg-foreground transition-colors duration-300 whitespace-nowrap shrink-0"
         >
           Book Private Viewing
         </a>

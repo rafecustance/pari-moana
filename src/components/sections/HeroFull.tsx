@@ -65,12 +65,12 @@ export function HeroFull({
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full overflow-hidden bg-stone-100"
+      className="relative h-screen w-full overflow-hidden bg-surface"
     >
       {/* Curtain - lifts up to reveal */}
       <div 
         ref={curtainRef}
-        className="absolute inset-0 z-20 bg-stone-100"
+        className="absolute inset-0 z-20 bg-surface"
         aria-hidden="true"
       />
 
@@ -98,11 +98,11 @@ export function HeroFull({
         <h1 
           className="font-display font-light text-center whitespace-nowrap select-none w-full"
           style={{
-            fontSize: 'clamp(6rem, 24vw, 30rem)',
+            fontSize: 'clamp(5rem, 19vw, 24rem)',
             lineHeight: 0.8,
             letterSpacing: '-0.03em',
-            transform: 'translateY(18%)',
-            color: '#f5f5f4',
+            transform: 'translateY(12%)',
+            color: 'rgb(241, 242, 235)',
           }}
         >
           Pari Moana
