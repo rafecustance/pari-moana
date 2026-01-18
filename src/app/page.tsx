@@ -3,6 +3,7 @@ import {
   HeroFull, 
   Introduction, 
   VideoBlock,
+  Diptych,
   ImageBlock, 
   SplitBlock,
   EnquiryTeaser,
@@ -30,6 +31,13 @@ export default function HomePage() {
 
         {/* Video showcase */}
         <VideoBlock src={assetUrl('/assets/hero/video/hero-video-hac281d.mp4')} />
+
+        {/* Arrival / Setting diptych */}
+        <Diptych
+          imageSrc={assetUrl('/assets/imagery/arrival-vertical-jau8w.jpeg')}
+          imageAlt="Tree-lined driveway approaching the estate"
+          imagePosition="right"
+        />
 
         {/* Full-bleed image */}
         <ImageBlock 
