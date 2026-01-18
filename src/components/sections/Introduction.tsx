@@ -12,8 +12,8 @@ if (typeof window !== 'undefined') {
 }
 
 /**
- * Hillbrook-style introduction with playful, staggered typography.
- * Creative text layout with mixed weights and italics.
+ * Introduction section with balanced two-column layout.
+ * Headline and body text aligned horizontally for visual cohesion.
  */
 export function Introduction() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -28,8 +28,6 @@ export function Introduction() {
         return;
       }
 
-      const lines = headlineRef.current?.querySelectorAll('.headline-line');
-      
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -38,25 +36,17 @@ export function Introduction() {
         },
       });
 
-      if (lines) {
-        tl.fromTo(
-          lines,
-          { opacity: 0, y: 80 },
-          { 
-            opacity: 1, 
-            y: 0, 
-            duration: 1.2, 
-            ease: 'power3.out',
-            stagger: 0.15
-          }
-        );
-      }
+      tl.fromTo(
+        headlineRef.current,
+        { opacity: 0, y: 60 },
+        { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' }
+      );
 
       tl.fromTo(
         bodyRef.current,
         { opacity: 0, y: 40 },
         { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
-        '-=0.6'
+        '-=0.8'
       );
     },
     { scope: sectionRef, dependencies: [prefersReducedMotion] }
@@ -68,106 +58,43 @@ export function Introduction() {
       className="bg-surface py-24 md:py-40"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-        {/* Playful staggered headline - Hillbrook style */}
-        <div 
-          ref={headlineRef}
-          className="relative"
-        >
-          {/* Line 1: "Your luxury escape" */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Headline - left side */}
           <div 
-            className="headline-line"
+            ref={headlineRef}
             style={{ opacity: prefersReducedMotion ? 1 : 0 }}
           >
-            <span 
+            <h2 
               className="font-display font-light text-heading"
-              style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
+              style={{ 
+                fontSize: 'clamp(2.375rem, 5.5vw, 3.75rem)', 
+                lineHeight: 1.15,
+              }}
             >
-              Your{' '}
-            </span>
-            <span 
-              className="font-display font-light italic text-heading"
-              style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
-            >
-              luxury escape
-            </span>
+              Where days unfold{' '}
+              <em className="italic">differently</em>
+            </h2>
           </div>
 
-          {/* Line 2: "to disconnect" - indented */}
+          {/* Body text - right side */}
           <div 
-            className="headline-line pl-[8%] md:pl-[15%]"
+            ref={bodyRef}
             style={{ opacity: prefersReducedMotion ? 1 : 0 }}
           >
-            <span 
-              className="font-display font-light text-heading"
-              style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
+            <p 
+              className="text-foreground text-base md:text-lg leading-relaxed"
+              style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
             >
-              to{' '}
-            </span>
-            <span 
-              className="font-display font-light italic text-heading"
-              style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
+              Set above the Pauatahanui Inlet, Pari Moana offers a rare sense of space and seclusion without isolation. The home is shaped around light, outlook and ease, creating an environment that encourages both connection and quiet retreat.
+            </p>
+            
+            <p 
+              className="text-foreground text-base md:text-lg leading-relaxed mt-6"
+              style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
             >
-              disconnect
-            </span>
+              Here, life moves with the rhythm of the landscape; mornings by the water, long afternoons drifting between inside and out, and evenings defined by calm and privacy.
+            </p>
           </div>
-
-          {/* Line 3: "and reconnect" - more indented */}
-          <div 
-            className="headline-line pl-[20%] md:pl-[35%]"
-            style={{ opacity: prefersReducedMotion ? 1 : 0 }}
-          >
-            <span 
-              className="font-display font-light text-heading"
-              style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
-            >
-              and{' '}
-            </span>
-            <span 
-              className="font-display font-light italic text-heading"
-              style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', lineHeight: 1.1 }}
-            >
-              reconnect
-            </span>
-          </div>
-        </div>
-
-        {/* Body text and CTA - aligned right */}
-        <div 
-          ref={bodyRef}
-          className="mt-12 md:mt-16 ml-auto max-w-lg md:max-w-md lg:max-w-lg"
-          style={{ opacity: prefersReducedMotion ? 1 : 0 }}
-        >
-          <p 
-            className="text-foreground text-base md:text-lg leading-relaxed"
-            style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
-          >
-            Pari Moana is a luxury waterfront estate nestled on New Zealand's stunning coastline. 
-            Available for exclusive private stays, this architectural retreat offers the perfect 
-            setting for those seeking space, beauty, and absolute tranquility.
-          </p>
-
-          <a
-            href="/the-home"
-            className="inline-flex items-center gap-3 mt-8 group"
-          >
-            <span className="text-sm font-medium tracking-widest text-heading uppercase">
-              Book now
-            </span>
-            <span className="flex items-center justify-center w-8 h-8 rounded-full bg-accent text-on-image transition-transform duration-300 group-hover:translate-x-1">
-              <svg 
-                width="14" 
-                height="14" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2"
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </span>
-          </a>
         </div>
       </div>
     </section>

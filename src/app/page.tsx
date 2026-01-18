@@ -4,6 +4,8 @@ import {
   Introduction, 
   VideoBlock,
   Diptych,
+  LivingChapter,
+  Architecture,
   ImageBlock, 
   SplitBlock,
   EnquiryTeaser,
@@ -32,11 +34,29 @@ export default function HomePage() {
         {/* Video showcase */}
         <VideoBlock src={assetUrl('/assets/hero/video/hero-video-hac281d.mp4')} />
 
-        {/* Arrival / Setting diptych */}
+        {/* Arrival - two-phase sticky scroll */}
         <Diptych
           imageSrc={assetUrl('/assets/imagery/arrival-vertical-jau8w.jpeg')}
           imageAlt="Tree-lined driveway approaching the estate"
-          imagePosition="right"
+          phase2ImageSrc="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/threshold.jpg"
+          phase2ImageAlt="Threshold view of the residence"
+        />
+
+        {/* Living, Not Rooms - pinned chapter */}
+        <LivingChapter 
+          images={[
+            assetUrl('/assets/imagery/living1-ahdks.jpg'),
+            assetUrl('/assets/imagery/living2-hsgdjs.jpg'),
+            assetUrl('/assets/imagery/living3-aowidk.jpg'),
+          ]}
+        />
+
+        {/* Architecture section - editorial two-column layout */}
+        <Architecture
+          headingOption="A"
+          primaryImage="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/architecture-1-qpasdhdjpg.jpg"
+          secondaryImage="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/architecture-2-hadsk.jpg"
+          supportingImage="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/architecture-0-bahdyw.jpg"
         />
 
         {/* Full-bleed image */}

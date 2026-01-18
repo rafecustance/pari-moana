@@ -16,6 +16,8 @@ export { ImageBlock } from './ImageBlock';
 export { VideoBlock } from './VideoBlock';
 export { TextBlock, SplitBlock } from './TextBlock';
 export { Diptych } from './Diptych';
+export { LivingChapter } from './LivingChapter';
+export { Architecture } from './Architecture';
 export { EnquiryTeaser } from './EnquiryTeaser';
 export { EstateMap } from './EstateMap';
 
