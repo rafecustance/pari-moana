@@ -5,8 +5,10 @@ import {
   VideoBlock,
   ImageBlock, 
   SplitBlock,
-  EnquiryTeaser 
+  EnquiryTeaser,
+  EstateMap 
 } from '@/components/sections';
+import { assetUrl } from '@/lib/assets';
 
 /**
  * Pari Moana Homepage
@@ -21,18 +23,24 @@ export default function HomePage() {
       
       <main>
         {/* Full-viewport hero */}
-        <HeroFull />
+        <HeroFull imageSrc={assetUrl('/assets/hero/hero-a8sdjc.jpg')} />
 
         {/* Introduction */}
         <Introduction />
 
         {/* Video showcase */}
-        <VideoBlock />
+        <VideoBlock src={assetUrl('/assets/hero/video/hero-video-hac281d.mp4')} />
 
         {/* Full-bleed image */}
         <ImageBlock 
           aspectRatio="cinematic" 
           label="Living spaces" 
+        />
+
+        {/* Interactive estate map with POIs */}
+        <EstateMap 
+          imageSrc={assetUrl('/assets/hero/hero-a8sdjc.jpg')}
+          imageAlt="Aerial view of Pari Moana estate"
         />
 
         {/* Split block: Light */}
