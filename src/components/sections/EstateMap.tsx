@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -300,24 +300,38 @@ const aspectRatios = {
   standard: 'aspect-[4/3]',
 };
 
-export function EstateMap({
+// Inner component that reads search params (must be wrapped in Suspense)
+function AuthoringModeProvider({ children }: { children: (isAuthoringMode: boolean) => React.ReactNode }) {
+  const searchParams = useSearchParams();
+  const isAuthoringMode = searchParams.get('author') === 'true';
+  return <>{children(isAuthoringMode)}</>;
+}
+
+export function EstateMap(props: EstateMapProps) {
+  return (
+    <Suspense fallback={<EstateMapInner {...props} isAuthoringMode={false} />}>
+      <AuthoringModeProvider>
+        {(isAuthoringMode) => <EstateMapInner {...props} isAuthoringMode={isAuthoringMode} />}
+      </AuthoringModeProvider>
+    </Suspense>
+  );
+}
+
+function EstateMapInner({
   imageSrc,
   imageAlt = 'Estate aerial view',
   pois = defaultPOIs,
   aspectRatio = 'cinematic',
   className = '',
-}: EstateMapProps) {
+  isAuthoringMode,
+}: EstateMapProps & { isAuthoringMode: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const searchParams = useSearchParams();
 
   // State
   const [activePOI, setActivePOI] = useState<string | null>(null);
   const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number } | null>(null);
-
-  // Authoring mode from query param
-  const isAuthoringMode = searchParams.get('author') === 'true';
 
   // Scroll-triggered reveal animation
   useGSAP(
