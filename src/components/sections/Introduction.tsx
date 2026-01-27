@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -11,20 +11,42 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+interface IntroductionProps {
+  /** Optional video source URL */
+  videoSrc?: string;
+  /** Optional video poster image */
+  videoPoster?: string;
+}
+
 /**
  * Introduction section with balanced two-column layout.
  * Headline and body text aligned horizontally for visual cohesion.
+ * Optionally includes a video below the text.
  */
-export function Introduction() {
+export function Introduction({ videoSrc, videoPoster }: IntroductionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
   const prefersReducedMotion = useReducedMotion();
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   useGSAP(
     () => {
       if (prefersReducedMotion) {
-        gsap.set([headlineRef.current, bodyRef.current], { opacity: 1, y: 0 });
+        gsap.set([headlineRef.current, bodyRef.current, videoContainerRef.current], { opacity: 1, y: 0 });
         return;
       }
 
@@ -48,6 +70,15 @@ export function Introduction() {
         { opacity: 1, y: 0, duration: 1, ease: 'power3.out' },
         '-=0.8'
       );
+
+      if (videoContainerRef.current) {
+        tl.fromTo(
+          videoContainerRef.current,
+          { opacity: 0, y: 60 },
+          { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
+          '-=0.4'
+        );
+      }
     },
     { scope: sectionRef, dependencies: [prefersReducedMotion] }
   );
@@ -87,15 +118,48 @@ export function Introduction() {
             >
               Set above the Pauatahanui Inlet, Pari Moana offers a rare sense of space and seclusion without isolation. The home is shaped around light, outlook and ease, creating an environment that encourages both connection and quiet retreat.
             </p>
-            
-            <p 
-              className="text-foreground text-base md:text-lg leading-relaxed mt-6"
-              style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
-            >
-              Here, life moves with the rhythm of the landscape; mornings by the water, long afternoons drifting between inside and out, and evenings defined by calm and privacy.
-            </p>
           </div>
         </div>
+
+        {/* Video - below text */}
+        {videoSrc && (
+          <div
+            ref={videoContainerRef}
+            className="relative overflow-hidden rounded-sm mt-20 md:mt-32"
+            style={{ opacity: prefersReducedMotion ? 1 : 0 }}
+          >
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={videoPoster}
+              className="w-full h-auto object-cover"
+              style={{ aspectRatio: '16/9' }}
+            >
+              <source src={videoSrc} type="video/mp4" />
+            </video>
+
+            {/* Play/Pause button - bottom right */}
+            <button
+              onClick={togglePlay}
+              className="absolute bottom-4 right-4 md:bottom-6 md:right-6 flex items-center justify-center w-12 h-12 rounded-full bg-heading/80 backdrop-blur-sm text-on-image hover:bg-heading transition-colors duration-300"
+              aria-label={isPlaying ? 'Pause video' : 'Play video'}
+            >
+              {isPlaying ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5.14v14.72a1 1 0 001.5.86l11-7.36a1 1 0 000-1.72l-11-7.36a1 1 0 00-1.5.86z" />
+                </svg>
+              )}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
