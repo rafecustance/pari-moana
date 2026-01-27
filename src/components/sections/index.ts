@@ -8,22 +8,12 @@
  * 5. Each section should work independently on any page
  */
 
-export { Hero } from './Hero';
-export { Features } from './Features';
 export { HeroFull } from './HeroFull';
 export { Introduction } from './Introduction';
-export { ImageBlock } from './ImageBlock';
-export { VideoBlock } from './VideoBlock';
-export { TextBlock, SplitBlock } from './TextBlock';
-export { Diptych } from './Diptych';
 export { Heritage } from './Heritage';
 export { Living } from './Living';
-export { LivingChapter } from './LivingChapter';
-export { Architecture } from './Architecture';
 export { EnquiryTeaser } from './EnquiryTeaser';
-export { EstateMap } from './EstateMap';
 export { Retreat } from './Retreat';
-export { Flexibility } from './Flexibility';
+export { Grounds } from './Grounds';
 export { LocalConnection } from './LocalConnection';
 export { PropertyDetails } from './PropertyDetails';
-

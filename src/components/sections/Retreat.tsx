@@ -83,13 +83,13 @@ export function Retreat({
   return (
     <section 
       ref={sectionRef}
-      className="bg-surface py-24 md:py-40"
+      className="bg-surface pt-12 md:pt-16 lg:pt-20 pb-24 md:pb-32 lg:pb-40"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
         {/* Copy - centered, minimal */}
         <div 
           ref={textRef}
-          className="max-w-2xl mx-auto text-center mb-16 md:mb-24"
+          className="max-w-2xl mx-auto text-center mb-20 md:mb-28 lg:mb-36"
           style={{ opacity: prefersReducedMotion ? 1 : 0 }}
         >
           <p 
@@ -133,7 +133,7 @@ export function Retreat({
           {/* Secondary image - smaller, offset */}
           <div 
             ref={secondaryRef}
-            className="lg:col-span-5 lg:pt-16"
+            className="lg:col-span-5 lg:pt-12 xl:pt-20"
             style={{ opacity: prefersReducedMotion ? 1 : 0 }}
           >
             <div className="relative aspect-[4/5] overflow-hidden">

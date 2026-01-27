@@ -6,7 +6,7 @@ import {
   Living,
   EnquiryTeaser,
   Retreat,
-  Flexibility,
+  Grounds,
   LocalConnection,
   PropertyDetails,
 } from '@/components/sections';
@@ -41,9 +41,10 @@ export default function HomePage() {
         <Living 
           images={[
             'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living1-ahdks.jpg',
-            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living-2-adsasd.webp', // placeholder for terrace
-            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living-3-adiuad.webp', // placeholder for fireplace at dusk
-            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living1-ahdks.jpg', // placeholder for evening interior
+            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living-2-adsasd.webp',
+            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living-5-ajdasd.webp', // placeholder for terrace
+            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living-6-oaidas.webp', // placeholder for fireplace at dusk
+          // placeholder for evening interior
           ]}
         />
 
@@ -54,11 +55,21 @@ export default function HomePage() {
           secondaryImage="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/retreat-2-posda.webp"
         />
 
-        {/* 5. FLEXIBILITY — Adaptability as freedom */}
-        <Flexibility />
+        {/* 5. GROUNDS — Outdoor extension of the home */}
+        <Grounds 
+          slides={[
+            { image: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-0.webp', alt: 'Established gardens' },
+            { image: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-4.webp', alt: 'Sheltered terrace' },
+            { image: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-2.webp', alt: 'Outdoor living space' },
+            { image: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-1.webp', alt: 'Garden pathway' },
+          ]}
+        />
 
-        {/* 6. CONNECTION — Human scale beyond the gate */}
-        <LocalConnection />
+        {/* 6. PLACE — Property scale and local connection */}
+        <LocalConnection 
+          mapImageSrc={assetUrl('/assets/hero/hero-a8sdjc.jpg')}
+          imageAlt="Aerial view of Pari Moana estate"
+        />
 
         {/* 7. CLOSE — Property details + restrained enquiry */}
         <PropertyDetails />
