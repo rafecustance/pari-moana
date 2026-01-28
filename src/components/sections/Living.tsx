@@ -105,7 +105,7 @@ export function Living({ images, imageAlts }: LivingProps) {
               <div key={index} className="relative aspect-[16/10] w-full">
                 <Image
                   src={images[index]}
-                  alt={alts[index]}
+                  alt={alts[index] ?? ''}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) calc(100vw - 40px), calc(100vw - 64px)"
