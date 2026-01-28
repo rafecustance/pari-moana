@@ -19,8 +19,8 @@ interface IntroductionProps {
 }
 
 /**
- * Introduction section with balanced two-column layout.
- * Headline and body text aligned horizontally for visual cohesion.
+ * Introduction section with stacked layout.
+ * Headline on top, body text below for clear hierarchy.
  * Optionally includes a video below the text.
  */
 export function Introduction({ videoSrc, videoPoster }: IntroductionProps) {
@@ -88,38 +88,39 @@ export function Introduction({ videoSrc, videoPoster }: IntroductionProps) {
       ref={sectionRef}
       className="bg-surface py-24 md:py-40"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Headline - left side */}
-          <div 
-            ref={headlineRef}
-            style={{ opacity: prefersReducedMotion ? 1 : 0 }}
+      <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-20 text-center">
+        {/* Headline */}
+        <div 
+          ref={headlineRef}
+          style={{ opacity: prefersReducedMotion ? 1 : 0 }}
+        >
+          <h2 
+            className="font-display font-light text-heading mb-8"
+            style={{ 
+              fontSize: 'clamp(2.375rem, 5.5vw, 3.75rem)', 
+              lineHeight: 1.15,
+            }}
           >
-            <h2 
-              className="font-display font-light text-heading"
-              style={{ 
-                fontSize: 'clamp(2.375rem, 5.5vw, 3.75rem)', 
-                lineHeight: 1.15,
-              }}
-            >
-              Where days unfold{' '}
-              <em className="italic">differently</em>
-            </h2>
-          </div>
-
-          {/* Body text - right side */}
-          <div 
-            ref={bodyRef}
-            style={{ opacity: prefersReducedMotion ? 1 : 0 }}
-          >
-            <p 
-              className="text-foreground text-base md:text-lg leading-relaxed"
-              style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
-            >
-              Set above the Pauatahanui Inlet, Pari Moana offers a rare sense of space and seclusion without isolation. The home is shaped around light, outlook and ease, creating an environment that encourages both connection and quiet retreat.
-            </p>
-          </div>
+            Some homes change where you live. Others change how you live.
+          </h2>
         </div>
+
+        {/* Body text */}
+        <div 
+          ref={bodyRef}
+          style={{ opacity: prefersReducedMotion ? 1 : 0 }}
+        >
+          <p 
+            className="text-foreground text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
+            style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
+          >
+            Hidden above the Pauatahanui Inlet is a private architectural estate - discovered by chance and cherished for nearly 30 years.
+          </p>
+        </div>
+      </div>
+
+      {/* Video container - separate div for full width */}
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
 
         {/* Video - below text */}
         {videoSrc && (

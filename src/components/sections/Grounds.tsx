@@ -50,8 +50,8 @@ interface GroundsProps {
  */
 export function Grounds({
   slides = DEFAULT_SLIDES,
-  headline = 'Designed for life outdoors',
-  body = "A series of outdoor spaces sit around the home, offering shelter and flexibility for daily use. Open to northern light and protected from the elements, they're usable across seasons.",
+  headline = 'Here, lifestyle is built into daily life.',
+  body = "A pool, spa, gym, and established grounds mean there's no need to escape for the weekend. Leisure unfolds naturally - from waterside walks and time on the inlet, to evenings by the fire or long lunches with friends.",
 }: GroundsProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
