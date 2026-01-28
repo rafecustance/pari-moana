@@ -8,7 +8,7 @@ import {
   Retreat,
   Grounds,
   LocalConnection,
-  Activities,
+  // Activities, // Hidden for now
 } from '@/components/sections';
 import { assetUrl } from '@/lib/assets';
 
@@ -71,8 +71,8 @@ export default function HomePage() {
           imageAlt="Aerial view of Pari Moana estate"
         />
 
-        {/* 7. ACTIVITIES — What you can do */}
-        <Activities />
+        {/* 7. ACTIVITIES — What you can do (hidden for now) */}
+        {/* <Activities /> */}
 
         {/* 8. CLOSE — Restrained enquiry */}
         <EnquiryTeaser />
