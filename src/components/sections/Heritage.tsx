@@ -76,13 +76,13 @@ export function Heritage({ imageSrc, imageAlt = 'Architectural detail of the res
             style={{ opacity: prefersReducedMotion ? 1 : 0 }}
           >
             <h2 className="font-display font-light text-heading text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] leading-[1.2] tracking-[-0.02em] mb-6">
-              A home shaped over time
+              A Home shaped by design thinking
             </h2>
             <p 
               className="text-[1.0625rem] md:text-[1.125rem] lg:text-[1.1875rem] leading-[1.7] text-foreground/85"
               style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
             >
-              Originally conceived as a family home and later refined by its designer–owners, Pari Moana has evolved with care rather than reinvention. Each change respects the original form, quietly elevating it for contemporary living.
+              Evolved and refined by designer-owners, the house reflects a deep understanding of light, proportion, and everyday liveability.
             </p>
           </div>
 

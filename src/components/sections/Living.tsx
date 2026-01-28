@@ -6,7 +6,7 @@ import { useReducedMotion } from '@/lib/use-reduced-motion';
 
 const CONTENT = {
   headline: 'Living spaces, seamlessly connected',
-  body: 'Living and entertaining unfold across connected spaces, inside and out; scaled for quiet evenings or generous gatherings.',
+  body: 'The house opens to the garden on all sides, with decks and courtyard spaces - supporting both quiet moments and memorable gatherings.',
 };
 
 const DEFAULT_ALTS = [
@@ -84,10 +84,10 @@ export function Living({ images, imageAlts }: LivingProps) {
   // Mobile / reduced-motion: Static layout
   if (!hasMounted || !isDesktop || prefersReducedMotion) {
     return (
-      <section className="pt-16 md:pt-24 pb-12 md:pb-16 bg-surface">
+      <section className="py-16 md:py-24 bg-surface">
         {/* Intro text */}
         <div className="max-w-4xl mx-auto px-6 md:px-12 lg:px-20 mb-16 md:mb-24 text-center">
-          <h2 className="font-display font-light text-heading text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] xl:text-[2.75rem] xl:whitespace-nowrap leading-[1.2] tracking-[-0.02em] mb-6">
+          <h2 className="font-display font-light text-heading text-[1.75rem] md:text-[2rem] lg:text-[2.25rem] leading-[1.2] tracking-[-0.02em] mb-6">
             {CONTENT.headline}
           </h2>
           <p 
@@ -104,8 +104,8 @@ export function Living({ images, imageAlts }: LivingProps) {
             images?.[index] && (
               <div key={index} className="relative aspect-[16/10] w-full">
                 <Image
-                  src={images[index]!}
-                  alt={alts[index as 0 | 1 | 2 | 3]}
+                  src={images[index]}
+                  alt={alts[index] ?? ''}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) calc(100vw - 40px), calc(100vw - 64px)"
@@ -122,11 +122,11 @@ export function Living({ images, imageAlts }: LivingProps) {
   return (
     <>
       {/* Text section - static with contrasting background */}
-      <section className="pt-24 md:pt-32 lg:pt-40 pb-10 md:pb-14 lg:pb-16 bg-surface">
+      <section className="pt-24 pb-12 md:pt-32 md:pb-16 lg:pt-40 lg:pb-20 bg-surface">
         <div className="max-w-4xl mx-auto px-6 md:px-12 lg:px-20 text-center">
           <h2 
-            className="font-display font-light text-heading leading-[1.15] mb-6 xl:whitespace-nowrap"
-            style={{ fontSize: 'clamp(2rem, 4.5vw, 3.75rem)' }}
+            className="font-display font-light text-heading leading-[1.15] mb-6"
+            style={{ fontSize: 'clamp(2rem, 4.5vw, 3.25rem)' }}
           >
             {CONTENT.headline}
           </h2>
@@ -161,8 +161,8 @@ export function Living({ images, imageAlts }: LivingProps) {
               >
                 {images?.[index] ? (
                   <Image
-                    src={images[index]!}
-                    alt={alts[index as 0 | 1 | 2 | 3]}
+                    src={images[index]}
+                    alt={alts[index] ?? ''}
                     fill
                     className="object-cover"
                     sizes="calc(100vw - 8rem)"
@@ -171,7 +171,7 @@ export function Living({ images, imageAlts }: LivingProps) {
                 ) : (
                   <div className="absolute inset-0 bg-surface flex items-center justify-center">
                     <span className="text-small text-muted tracking-widest text-center px-4">
-                      {alts[index]}
+                      {alts[index] ?? ''}
                     </span>
                   </div>
                 )}

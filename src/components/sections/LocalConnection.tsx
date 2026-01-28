@@ -356,14 +356,20 @@ function LocalConnectionInner({
               lineHeight: 1.15,
             }}
           >
-            Privacy without isolation
+            A private world - perfectly connected.
           </h2>
           
+          <p 
+            className="text-foreground text-base md:text-lg leading-relaxed mb-4"
+            style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
+          >
+            And while Pari Moana feels a world away, Pauatahanui Village is right on its doorstep: morning coffee, inlet walks, boutique movie house and friendly community.
+          </p>
           <p 
             className="text-foreground text-base md:text-lg leading-relaxed"
             style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
           >
-            The property offers the space and privacy of a rural holding, without isolation. Pauatahanui village sits just beyond the gate; morning coffee, weekend markets, neighbours who wave. The quiet here is chosen, never imposed.
+            Wellington City, the Hutt Valley, and the Kapiti Coast are all within easy reach.
           </p>
         </div>
 
