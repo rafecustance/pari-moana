@@ -162,7 +162,7 @@ export function Living({ images, imageAlts }: LivingProps) {
                 {images?.[index] ? (
                   <Image
                     src={images[index]}
-                    alt={alts[index]}
+                    alt={alts[index] ?? ''}
                     fill
                     className="object-cover"
                     sizes="calc(100vw - 8rem)"
@@ -171,7 +171,7 @@ export function Living({ images, imageAlts }: LivingProps) {
                 ) : (
                   <div className="absolute inset-0 bg-surface flex items-center justify-center">
                     <span className="text-small text-muted tracking-widest text-center px-4">
-                      {alts[index]}
+                      {alts[index] ?? ''}
                     </span>
                   </div>
                 )}
