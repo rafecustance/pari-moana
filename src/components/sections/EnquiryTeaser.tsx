@@ -173,7 +173,7 @@ export function EnquiryTeaser({
                 fontSize: '0.9375rem',
               }}
             >
-              Join the List
+              Register
             </button>
           </form>
           

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Footer } from "@/components/layout";
 import "./globals.css";
 
 /**
@@ -46,6 +47,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${feature.variable} ${basisGrotesque.variable} antialiased`}>
         {children}
+        <Footer />
       </body>
     </html>
   );
