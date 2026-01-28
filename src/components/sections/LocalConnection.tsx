@@ -373,38 +373,29 @@ function LocalConnectionInner({
           </p>
         </div>
 
-        {/* Map or Image */}
+        {/* Property Image (POI functionality disabled for now) */}
         <div 
           ref={mapRef}
           className="mb-12 md:mb-16"
           style={{ opacity: prefersReducedMotion ? 1 : 0 }}
         >
-          {hasMap && displayImageSrc ? (
-            <InteractiveMap
-              imageSrc={displayImageSrc}
-              imageAlt={imageAlt}
-              pois={pois}
-              prefersReducedMotion={prefersReducedMotion}
-            />
-          ) : (
-            <div className="relative aspect-[16/9] overflow-hidden">
-              {displayImageSrc ? (
-                <Image
-                  src={displayImageSrc}
-                  alt={imageAlt}
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                />
-              ) : (
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 via-surface to-slate-50/30 flex items-center justify-center">
-                  <span className="text-small text-muted tracking-widest">
-                    {imageAlt}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
+          <div className="relative aspect-[16/9] overflow-hidden">
+            {displayImageSrc ? (
+              <Image
+                src={displayImageSrc}
+                alt={imageAlt}
+                fill
+                className="object-cover"
+                sizes="100vw"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 via-surface to-slate-50/30 flex items-center justify-center">
+                <span className="text-small text-muted tracking-widest">
+                  {imageAlt}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Details grid - property attributes + proximity */}
@@ -414,8 +405,8 @@ function LocalConnectionInner({
           style={{ opacity: prefersReducedMotion ? 1 : 0 }}
         >
           {[
-            { label: 'Land', value: '2.4 ha' },
             { label: 'Village', value: '2 min' },
+            { label: 'Porirua', value: '10 min' },
             { label: 'Wellington', value: '25 min' },
             { label: 'Airport', value: '30 min' },
           ].map((item) => (
