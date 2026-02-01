@@ -27,6 +27,9 @@ function RegistrationForm() {
     setError(null);
     setIsLoading(true);
 
+    // Generate unique event ID for Meta deduplication between Pixel and CAPI
+    const eventId = crypto.randomUUID();
+
     // Capture form submission event (before API call)
     const utmCampaign = searchParams.get('utm_campaign');
     posthog.capture('registration_form_submitted', {
@@ -47,6 +50,7 @@ function RegistrationForm() {
         body: JSON.stringify({
           email,
           utmCampaign,
+          eventId, // Pass to server for CAPI deduplication
         }),
       });
 
@@ -54,6 +58,13 @@ function RegistrationForm() {
 
       if (!response.ok) {
         throw new Error(data.error || 'Registration failed');
+      }
+
+      // Fire Meta Pixel Lead event on successful registration
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Lead', {
+          content_name: 'Registration',
+        }, { eventID: eventId });
       }
 
       setIsSuccess(true);
