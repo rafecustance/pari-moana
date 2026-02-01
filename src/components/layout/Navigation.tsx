@@ -33,8 +33,11 @@ export function Navigation() {
     if (!registerSection) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsEnquiryVisible(entry.isIntersecting);
+      (entries) => {
+        const entry = entries[0];
+        if (entry) {
+          setIsEnquiryVisible(entry.isIntersecting);
+        }
       },
       { threshold: 0.1 }
     );
