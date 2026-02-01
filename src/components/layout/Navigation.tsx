@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import posthog from 'posthog-js';
 
 /**
  * Floating CTA pill for Pari Moana.
@@ -89,6 +90,12 @@ export function Navigation() {
         <a
           href="#register"
           className="block px-6 py-3 text-sm font-medium text-on-image bg-heading rounded-full hover:bg-foreground transition-colors duration-300 whitespace-nowrap"
+          onClick={() => {
+            posthog.capture('navigation_cta_clicked', {
+              cta_text: 'Register Interest',
+              cta_destination: '#register',
+            });
+          }}
         >
           Register Interest
         </a>

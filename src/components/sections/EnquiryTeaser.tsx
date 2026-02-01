@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
+import posthog from 'posthog-js';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,13 +27,22 @@ function RegistrationForm() {
     setError(null);
     setIsLoading(true);
 
+    // Capture form submission event (before API call)
+    const utmCampaign = searchParams.get('utm_campaign');
+    posthog.capture('registration_form_submitted', {
+      email_domain: email.split('@')[1]?.toLowerCase(),
+      utm_campaign: utmCampaign || null,
+    });
+
     try {
-      const utmCampaign = searchParams.get('utm_campaign');
+      // Get PostHog distinct ID to pass to server for event correlation
+      const distinctId = posthog.get_distinct_id();
 
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-POSTHOG-DISTINCT-ID': distinctId || '',
         },
         body: JSON.stringify({
           email,
