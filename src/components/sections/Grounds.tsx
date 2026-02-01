@@ -42,23 +42,95 @@ interface GroundsProps {
   body?: string;
 }
 
-/**
- * Grounds: Carousel showcasing outdoor spaces.
- * 
- * Full-width carousel with peek of adjacent slides,
- * labels, and arrow navigation.
- */
-export function Grounds({
-  slides = DEFAULT_SLIDES,
-  headline = 'Here, lifestyle is built into daily life.',
-  body = "A pool, spa, gym, and established grounds mean there's no need to escape for the weekend. Leisure unfolds naturally - from waterside walks and time on the inlet, to evenings by the fire or long lunches with friends.",
-}: GroundsProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
+// -----------------------------------------------------------------------------
+// Mobile Carousel - Native horizontal scroll with snap
+// -----------------------------------------------------------------------------
+
+interface MobileCarouselProps {
+  slides: Slide[];
+  prefersReducedMotion: boolean;
+}
+
+function MobileCarousel({ slides, prefersReducedMotion }: MobileCarouselProps) {
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion) {
+        gsap.set(carouselRef.current, { opacity: 1, y: 0 });
+        return;
+      }
+
+      gsap.fromTo(
+        carouselRef.current,
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: carouselRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    },
+    { dependencies: [prefersReducedMotion] }
+  );
+
+  return (
+    <div
+      ref={carouselRef}
+      className="flex gap-4 overflow-x-auto px-6 pb-4 -mx-6 snap-x snap-mandatory scrollbar-hide"
+      style={{ 
+        opacity: prefersReducedMotion ? 1 : 0,
+        WebkitOverflowScrolling: 'touch',
+      }}
+    >
+      {slides.map((slide, index) => (
+        <div
+          key={index}
+          className="flex-shrink-0 w-[85vw] snap-center"
+        >
+          <div className="relative aspect-[16/10] overflow-hidden rounded-sm">
+            {slide.image ? (
+              <Image
+                src={slide.image}
+                alt={slide.alt}
+                fill
+                className="object-cover"
+                sizes="85vw"
+                priority={index === 0}
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 via-surface to-stone-100 flex items-center justify-center">
+                <span className="text-small text-muted tracking-widest text-center px-8">
+                  {slide.alt}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Desktop Carousel - Motion-based with peek and arrows
+// -----------------------------------------------------------------------------
+
+interface DesktopCarouselProps {
+  slides: Slide[];
+  prefersReducedMotion: boolean;
+}
+
+function DesktopCarousel({ slides, prefersReducedMotion }: DesktopCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideWidth, setSlideWidth] = useState(0);
-  const prefersReducedMotion = useReducedMotion();
 
   const x = useMotionValue(0);
   const springX = useSpring(x, { 
@@ -70,12 +142,9 @@ export function Grounds({
   // Calculate slide width on mount and resize
   useEffect(() => {
     const updateWidth = () => {
-      if (carouselRef.current) {
-        // Main slide takes ~85% of viewport with gaps
-        const viewportWidth = window.innerWidth;
-        const mainWidth = Math.min(viewportWidth * 0.85, viewportWidth - 120);
-        setSlideWidth(mainWidth);
-      }
+      const viewportWidth = window.innerWidth;
+      const mainWidth = Math.min(viewportWidth * 0.85, viewportWidth - 120);
+      setSlideWidth(mainWidth);
     };
 
     updateWidth();
@@ -102,14 +171,12 @@ export function Grounds({
       const velocity = info.velocity.x;
       
       if (Math.abs(velocity) > 500) {
-        // Fast swipe
         if (velocity > 0 && currentSlide > 0) {
           goToSlide(currentSlide - 1);
         } else if (velocity < 0 && currentSlide < slides.length - 1) {
           goToSlide(currentSlide + 1);
         }
       } else if (Math.abs(info.offset.x) > threshold) {
-        // Slow drag past threshold
         if (info.offset.x > 0 && currentSlide > 0) {
           goToSlide(currentSlide - 1);
         } else if (info.offset.x < 0 && currentSlide < slides.length - 1) {
@@ -120,39 +187,197 @@ export function Grounds({
     [currentSlide, goToSlide, slideWidth, slides.length]
   );
 
-  // GSAP entrance animation
   useGSAP(
     () => {
       if (prefersReducedMotion) {
-        gsap.set([textRef.current, carouselRef.current], { opacity: 1, y: 0 });
+        gsap.set(carouselRef.current, { opacity: 1, y: 0 });
         return;
       }
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none none',
-        },
-      });
-
-      tl.fromTo(
-        textRef.current,
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
-      );
-
-      tl.fromTo(
+      gsap.fromTo(
         carouselRef.current,
         { opacity: 0, y: 60 },
-        { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
-        '-=0.6'
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: carouselRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    },
+    { dependencies: [prefersReducedMotion] }
+  );
+
+  const gap = 16;
+
+  return (
+    <div 
+      ref={carouselRef}
+      className="relative"
+      style={{ opacity: prefersReducedMotion ? 1 : 0 }}
+    >
+      <motion.div
+        className="flex cursor-grab active:cursor-grabbing"
+        style={{ 
+          x: springX,
+          paddingLeft: `calc((100vw - ${slideWidth}px) / 2)`,
+          gap: `${gap}px`,
+        }}
+        drag="x"
+        dragConstraints={{
+          left: -(slides.length - 1) * (slideWidth + gap),
+          right: 0,
+        }}
+        dragElastic={0.1}
+        onDragEnd={handleDragEnd}
+      >
+        {slides.map((slide, index) => (
+          <motion.div
+            key={index}
+            className="relative flex-shrink-0"
+            style={{ width: slideWidth }}
+            animate={{
+              scale: currentSlide === index ? 1 : 0.95,
+              opacity: currentSlide === index ? 1 : 0.6,
+            }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="relative aspect-[16/10] overflow-hidden">
+              {slide.image ? (
+                <Image
+                  src={slide.image}
+                  alt={slide.alt}
+                  fill
+                  className="object-cover pointer-events-none"
+                  sizes="85vw"
+                  priority={index === 0}
+                  draggable={false}
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 via-surface to-stone-100 flex items-center justify-center">
+                  <span className="text-small text-muted tracking-widest text-center px-8">
+                    {slide.alt}
+                  </span>
+                </div>
+              )}
+
+              {/* Navigation arrows - bottom right, only on current slide */}
+              {currentSlide === index && (
+                <div className="absolute bottom-6 right-6 flex gap-3">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goToSlide(currentSlide - 1);
+                    }}
+                    disabled={currentSlide === 0}
+                    className="w-11 h-11 rounded-full bg-on-image/90 backdrop-blur-sm flex items-center justify-center transition-all hover:bg-on-image disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="Previous slide"
+                  >
+                    <svg 
+                      width="18" 
+                      height="18" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="2"
+                      className="text-heading"
+                    >
+                      <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      goToSlide(currentSlide + 1);
+                    }}
+                    disabled={currentSlide === slides.length - 1}
+                    className="w-11 h-11 rounded-full bg-on-image/90 backdrop-blur-sm flex items-center justify-center transition-all hover:bg-on-image disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="Next slide"
+                  >
+                    <svg 
+                      width="18" 
+                      height="18" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="2"
+                      className="text-heading"
+                    >
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Main Component
+// -----------------------------------------------------------------------------
+
+/**
+ * Grounds: Carousel showcasing outdoor spaces.
+ * 
+ * Mobile: Native horizontal scroll with snap points
+ * Desktop: Full-width carousel with peek of adjacent slides and arrow navigation
+ */
+export function Grounds({
+  slides = DEFAULT_SLIDES,
+  headline = 'Here, lifestyle is built into daily life.',
+  body = "A pool, spa, gym, and established grounds mean there's no need to escape for the weekend. Leisure unfolds naturally - from waterside walks and time on the inlet, to evenings by the fire or long lunches with friends.",
+}: GroundsProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion) {
+        gsap.set(textRef.current, { opacity: 1, y: 0 });
+        return;
+      }
+
+      gsap.fromTo(
+        textRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 70%',
+            toggleActions: 'play none none none',
+          },
+        }
       );
     },
     { scope: sectionRef, dependencies: [prefersReducedMotion] }
   );
-
-  const gap = 16;
 
   return (
     <section 
@@ -162,7 +387,7 @@ export function Grounds({
       {/* Copy - centered above carousel */}
       <div 
         ref={textRef}
-        className="max-w-3xl mx-auto px-6 md:px-12 text-center mb-16 md:mb-20 lg:mb-24"
+        className="max-w-3xl mx-auto px-6 md:px-12 text-center mb-12 md:mb-20 lg:mb-24"
         style={{ opacity: prefersReducedMotion ? 1 : 0 }}
       >
         <h2 
@@ -186,109 +411,14 @@ export function Grounds({
         </p>
       </div>
 
-      {/* Carousel */}
-      <div 
-        ref={carouselRef}
-        className="relative"
-        style={{ opacity: prefersReducedMotion ? 1 : 0 }}
-      >
-        <motion.div
-          className="flex cursor-grab active:cursor-grabbing"
-          style={{ 
-            x: springX,
-            paddingLeft: `calc((100vw - ${slideWidth}px) / 2)`,
-            gap: `${gap}px`,
-          }}
-          drag="x"
-          dragConstraints={{
-            left: -(slides.length - 1) * (slideWidth + gap),
-            right: 0,
-          }}
-          dragElastic={0.1}
-          onDragEnd={handleDragEnd}
-        >
-          {slides.map((slide, index) => (
-            <motion.div
-              key={index}
-              className="relative flex-shrink-0"
-              style={{ width: slideWidth }}
-              animate={{
-                scale: currentSlide === index ? 1 : 0.95,
-                opacity: currentSlide === index ? 1 : 0.6,
-              }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                {slide.image ? (
-                  <Image
-                    src={slide.image}
-                    alt={slide.alt}
-                    fill
-                    className="object-cover pointer-events-none"
-                    sizes="85vw"
-                    priority={index === 0}
-                    draggable={false}
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 via-surface to-stone-100 flex items-center justify-center">
-                    <span className="text-small text-muted tracking-widest text-center px-8">
-                      {slide.alt}
-                    </span>
-                  </div>
-                )}
-
-                {/* Navigation arrows - bottom right, only on current slide */}
-                {currentSlide === index && (
-                  <div className="absolute bottom-6 right-6 flex gap-3">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        goToSlide(currentSlide - 1);
-                      }}
-                      disabled={currentSlide === 0}
-                      className="w-11 h-11 rounded-full bg-on-image/90 backdrop-blur-sm flex items-center justify-center transition-all hover:bg-on-image disabled:opacity-40 disabled:cursor-not-allowed"
-                      aria-label="Previous slide"
-                    >
-                      <svg 
-                        width="18" 
-                        height="18" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2"
-                        className="text-heading"
-                      >
-                        <path d="M15 18l-6-6 6-6" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        goToSlide(currentSlide + 1);
-                      }}
-                      disabled={currentSlide === slides.length - 1}
-                      className="w-11 h-11 rounded-full bg-on-image/90 backdrop-blur-sm flex items-center justify-center transition-all hover:bg-on-image disabled:opacity-40 disabled:cursor-not-allowed"
-                      aria-label="Next slide"
-                    >
-                      <svg 
-                        width="18" 
-                        height="18" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2"
-                        className="text-heading"
-                      >
-                        <path d="M9 18l6-6-6-6" />
-                      </svg>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+      {/* Carousel - different implementations for mobile vs desktop */}
+      {hasMounted && (
+        isDesktop ? (
+          <DesktopCarousel slides={slides} prefersReducedMotion={prefersReducedMotion} />
+        ) : (
+          <MobileCarousel slides={slides} prefersReducedMotion={prefersReducedMotion} />
+        )
+      )}
     </section>
   );
 }

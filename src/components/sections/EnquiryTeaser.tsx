@@ -108,10 +108,10 @@ export function EnquiryTeaser({
       {/* Content - centered with generous breathing room */}
       <div 
         ref={contentRef}
-        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 py-24"
+        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-12 pb-24"
         style={{ opacity: prefersReducedMotion ? 1 : 0 }}
       >
-        <div id="register" className="max-w-2xl text-center scroll-mt-24 mt-32 md:mt-44">
+        <div id="register" className="max-w-2xl text-center scroll-mt-24 mt-16 md:mt-24">
           {/* Eyebrow */}
           <p 
             className="text-on-image/70 mb-4 uppercase tracking-widest"
@@ -147,8 +147,6 @@ export function EnquiryTeaser({
               fontFamily: 'var(--font-basis), system-ui, sans-serif',
             }}
           >
-            Not simply a property to view, but a way of living to consider.
-            <br /><br />
             Register to receive the full information pack and priority invitations to private viewings and upcoming open homes.
           </p>
 

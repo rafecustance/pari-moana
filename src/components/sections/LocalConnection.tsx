@@ -1,8 +1,7 @@
 'use client';
 
-import { useRef, useState, useCallback, Suspense } from 'react';
+import { useRef } from 'react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -17,289 +16,35 @@ if (typeof window !== 'undefined') {
 // Types
 // -----------------------------------------------------------------------------
 
-interface POI {
-  id: string;
-  x: number;
-  y: number;
-  title: string;
-  description?: string;
-}
-
 interface LocalConnectionProps {
-  /** Static image (used if no mapImageSrc provided) */
+  /** Image source */
   imageSrc?: string;
   imageAlt?: string;
-  /** Interactive map image */
+  /** @deprecated Use imageSrc instead */
   mapImageSrc?: string;
-  /** Points of interest for the map */
-  pois?: POI[];
-}
-
-// -----------------------------------------------------------------------------
-// Default POIs - Estate features and local connections
-// -----------------------------------------------------------------------------
-
-const defaultPOIs: POI[] = [
-  {
-    id: 'main-residence',
-    x: 45,
-    y: 42,
-    title: 'Main Residence',
-    description: '380m² of considered living space.',
-  },
-  {
-    id: 'gardens',
-    x: 58,
-    y: 55,
-    title: 'Established Gardens',
-    description: 'Mature plantings and sheltered outdoor rooms.',
-  },
-  {
-    id: 'studio',
-    x: 35,
-    y: 60,
-    title: 'Detached Studio',
-    description: 'A flexible 45m² space at the garden edge.',
-  },
-  {
-    id: 'inlet-access',
-    x: 22,
-    y: 75,
-    title: 'Inlet Access',
-    description: 'Walking distance to the water.',
-  },
-  {
-    id: 'village',
-    x: 78,
-    y: 28,
-    title: 'Pauatahanui Village',
-    description: 'Morning coffee, weekend markets, familiar faces.',
-  },
-];
-
-// -----------------------------------------------------------------------------
-// POI Marker Component
-// -----------------------------------------------------------------------------
-
-interface POIMarkerProps {
-  poi: POI;
-  isActive: boolean;
-  isHidden: boolean;
-  onClick: () => void;
-}
-
-function POIMarker({ poi, isActive, isHidden, onClick }: POIMarkerProps) {
-  return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-      className={`
-        absolute z-20
-        w-7 h-7 -ml-3.5 -mt-3.5
-        flex items-center justify-center
-        rounded-full
-        bg-white/90 backdrop-blur-sm
-        border border-white/50
-        transition-all duration-300 ease-out
-        focus:outline-none
-        ${isActive 
-          ? 'bg-white shadow-none' 
-          : 'shadow-lg shadow-black/20 hover:scale-125 hover:bg-white'
-        }
-        ${isHidden ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-      `}
-      style={{
-        left: `${poi.x}%`,
-        top: `${poi.y}%`,
-      }}
-      aria-label={isActive ? `Close ${poi.title}` : `View ${poi.title}`}
-      aria-hidden={isHidden}
-      tabIndex={isHidden ? -1 : 0}
-    >
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        className={`
-          text-heading
-          transition-transform duration-300 ease-out
-          ${isActive ? 'rotate-45' : 'rotate-0'}
-        `}
-      >
-        <path
-          d="M6 1V11M1 6H11"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-      </svg>
-    </button>
-  );
-}
-
-// -----------------------------------------------------------------------------
-// POI Detail Card Component
-// -----------------------------------------------------------------------------
-
-interface POIDetailCardProps {
-  poi: POI;
-}
-
-function getCardPosition(poi: POI): {
-  horizontal: 'left' | 'right';
-  vertical: 'top' | 'bottom';
-} {
-  return {
-    horizontal: poi.x > 50 ? 'left' : 'right',
-    vertical: poi.y > 50 ? 'top' : 'bottom',
-  };
-}
-
-function POIDetailCard({ poi }: POIDetailCardProps) {
-  const position = getCardPosition(poi);
-  const gapPx = 16;
-
-  const getPositionStyles = (): React.CSSProperties => {
-    const styles: React.CSSProperties = {};
-    
-    if (position.horizontal === 'right') {
-      styles.left = `calc(${poi.x}% + ${gapPx}px)`;
-    } else {
-      styles.right = `calc(${100 - poi.x}% + ${gapPx}px)`;
-    }
-    
-    if (position.vertical === 'bottom') {
-      styles.top = `calc(${poi.y}% + ${gapPx}px)`;
-    } else {
-      styles.bottom = `calc(${100 - poi.y}% + ${gapPx}px)`;
-    }
-    
-    return styles;
-  };
-
-  return (
-    <div
-      className="
-        absolute z-10
-        w-72 max-w-[calc(100vw-2rem)]
-        bg-[#F8F8F4] 
-        rounded-lg
-        shadow-2xl shadow-black/25
-        overflow-hidden
-        animate-fade-in
-      "
-      style={getPositionStyles()}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <div className="p-4">
-        <h3 className="font-display text-lg italic text-heading leading-tight">
-          {poi.title}
-        </h3>
-        {poi.description && (
-          <p 
-            className="mt-1.5 text-sm text-foreground leading-relaxed"
-            style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
-          >
-            {poi.description}
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// -----------------------------------------------------------------------------
-// Interactive Map Component
-// -----------------------------------------------------------------------------
-
-interface InteractiveMapProps {
-  imageSrc: string;
-  imageAlt: string;
-  pois: POI[];
-  prefersReducedMotion: boolean;
-}
-
-function InteractiveMap({ imageSrc, imageAlt, pois, prefersReducedMotion }: InteractiveMapProps) {
-  const [activePOI, setActivePOI] = useState<string | null>(null);
-  const imageContainerRef = useRef<HTMLDivElement>(null);
-
-  const handlePOIClick = useCallback((poiId: string) => {
-    setActivePOI((current) => (current === poiId ? null : poiId));
-  }, []);
-
-  const handleImageClick = useCallback(() => {
-    setActivePOI(null);
-  }, []);
-
-  const activePOIData = pois.find((p) => p.id === activePOI);
-
-  return (
-    <div
-      ref={imageContainerRef}
-      className="relative w-full aspect-[16/9] overflow-hidden cursor-pointer"
-      onClick={handleImageClick}
-    >
-      <Image
-        src={imageSrc}
-        alt={imageAlt}
-        fill
-        className="object-cover"
-        sizes="100vw"
-      />
-
-      {/* POI Markers */}
-      {pois.map((poi) => (
-        <POIMarker
-          key={poi.id}
-          poi={poi}
-          isActive={activePOI === poi.id}
-          isHidden={activePOI !== null && activePOI !== poi.id}
-          onClick={() => handlePOIClick(poi.id)}
-        />
-      ))}
-
-      {/* Active POI Detail Card */}
-      {activePOIData && <POIDetailCard poi={activePOIData} />}
-
-      {/* Explore prompt */}
-      {!activePOI && !prefersReducedMotion && (
-        <div className="absolute bottom-6 left-6 z-10">
-          <span className="text-on-image text-sm tracking-wide opacity-80">
-            Tap to explore
-          </span>
-        </div>
-      )}
-    </div>
-  );
 }
 
 // -----------------------------------------------------------------------------
 // Main Component
 // -----------------------------------------------------------------------------
 
-function LocalConnectionInner({
+export function LocalConnection({
   imageSrc,
   imageAlt = 'Pauatahanui village and inlet',
   mapImageSrc,
-  pois = defaultPOIs,
 }: LocalConnectionProps) {
+  // Support legacy mapImageSrc prop
+  const displayImageSrc = imageSrc || mapImageSrc;
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-
-  // Use map if provided, otherwise fall back to static image
-  const hasMap = Boolean(mapImageSrc);
-  const displayImageSrc = mapImageSrc || imageSrc;
 
   useGSAP(
     () => {
       if (prefersReducedMotion) {
-        gsap.set([textRef.current, mapRef.current, detailsRef.current], { 
+        gsap.set([textRef.current, imageRef.current, detailsRef.current], { 
           opacity: 1, 
           y: 0 
         });
@@ -321,7 +66,7 @@ function LocalConnectionInner({
       );
 
       tl.fromTo(
-        mapRef.current,
+        imageRef.current,
         { opacity: 0, y: 60 },
         { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
         '-=0.7'
@@ -373,9 +118,9 @@ function LocalConnectionInner({
           </p>
         </div>
 
-        {/* Property Image (POI functionality disabled for now) */}
+        {/* Property Image */}
         <div 
-          ref={mapRef}
+          ref={imageRef}
           className="mb-12 md:mb-16"
           style={{ opacity: prefersReducedMotion ? 1 : 0 }}
         >
@@ -425,14 +170,5 @@ function LocalConnectionInner({
         </div>
       </div>
     </section>
-  );
-}
-
-// Wrap with Suspense for useSearchParams compatibility
-export function LocalConnection(props: LocalConnectionProps) {
-  return (
-    <Suspense fallback={<LocalConnectionInner {...props} />}>
-      <LocalConnectionInner {...props} />
-    </Suspense>
   );
 }

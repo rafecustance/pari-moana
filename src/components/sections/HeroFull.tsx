@@ -13,7 +13,10 @@ interface HeroFullProps {
 /**
  * Full-viewport hero section for Pari Moana.
  * 
- * Hillbrook-style: massive full-width typography with
+ * Mobile: Cropped hero with intentional focal point on roofline + water.
+ * Horizon pushed higher, reduced height (65vh), gradient at bottom.
+ * 
+ * Desktop: Hillbrook-style massive full-width typography with
  * solid cream color, positioned at the bottom.
  */
 export function HeroFull({ 
@@ -65,7 +68,7 @@ export function HeroFull({
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full overflow-hidden bg-surface"
+      className="relative h-[65vh] md:h-screen w-full overflow-hidden bg-surface"
     >
       {/* Curtain - lifts up to reveal */}
       <div 
@@ -84,24 +87,32 @@ export function HeroFull({
           alt="Pari Moana - Aerial view of the estate"
           fill
           priority
-          className="object-cover"
+          className="object-cover object-[center_35%] md:object-center"
           sizes="100vw"
         />
       </div>
 
-      {/* Giant title - bottom, full width, hugging bottom edge */}
+      {/* Gradient overlay - mobile only, bottom fade for text legibility */}
+      <div 
+        className="absolute inset-x-0 bottom-0 h-1/2 md:hidden z-[5]"
+        style={{
+          background: 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)'
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Title - anchored low, with gap on mobile */}
       <div 
         ref={titleRef}
-        className="absolute bottom-0 left-0 right-0 z-10"
+        className="absolute bottom-6 md:bottom-0 left-0 right-0 z-10"
         style={{ opacity: prefersReducedMotion ? 1 : 0 }}
       >
         <h1 
-          className="font-display font-light text-center whitespace-nowrap select-none w-full"
+          className="font-display font-light text-center whitespace-nowrap select-none w-full md:translate-y-[12%]"
           style={{
-            fontSize: 'clamp(5rem, 19vw, 24rem)',
+            fontSize: 'clamp(3.5rem, 19vw, 24rem)',
             lineHeight: 0.8,
-            letterSpacing: '-0.03em',
-            transform: 'translateY(12%)',
+            letterSpacing: '-0.04em',
             color: 'rgb(241, 242, 235)',
           }}
         >
