@@ -65,7 +65,7 @@ export function HeroFull({
   return (
     <section
       ref={containerRef}
-      className="relative h-screen w-full overflow-hidden bg-surface"
+      className="relative h-[85vh] md:h-screen w-full overflow-hidden bg-surface"
     >
       {/* Curtain - lifts up to reveal */}
       <div 

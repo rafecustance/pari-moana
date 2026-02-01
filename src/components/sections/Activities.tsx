@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -95,9 +95,10 @@ const defaultActivities: Activity[] = [
 
 interface ActivityCardProps {
   activity: Activity;
+  showTitle?: boolean;
 }
 
-function ActivityCard({ activity }: ActivityCardProps) {
+function ActivityCard({ activity, showTitle = false }: ActivityCardProps) {
   return (
     <div
       className="
@@ -124,6 +125,14 @@ function ActivityCard({ activity }: ActivityCardProps) {
       
       {/* Content */}
       <div className="p-6">
+        {showTitle && (
+          <h3 
+            className="font-display text-xl text-heading mb-2"
+            style={{ fontFamily: 'var(--font-feature), serif' }}
+          >
+            {activity.name}
+          </h3>
+        )}
         {activity.description && (
           <p 
             className="text-base text-foreground leading-relaxed"
@@ -132,6 +141,71 @@ function ActivityCard({ activity }: ActivityCardProps) {
             {activity.description}
           </p>
         )}
+      </div>
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Mobile Modal Component
+// -----------------------------------------------------------------------------
+
+interface ActivityModalProps {
+  activity: Activity;
+  onClose: () => void;
+}
+
+function ActivityModal({ activity, onClose }: ActivityModalProps) {
+  // Close on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  return (
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-6"
+      onClick={onClose}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-heading/60 backdrop-blur-sm" />
+      
+      {/* Card */}
+      <div 
+        className="relative w-full max-w-sm"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <ActivityCard activity={activity} showTitle />
+        
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute -top-3 -right-3 w-10 h-10 rounded-full bg-background flex items-center justify-center shadow-lg"
+          aria-label="Close"
+        >
+          <svg 
+            width="16" 
+            height="16" 
+            viewBox="0 0 16 16" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+            className="text-heading"
+          >
+            <path d="M4 4l8 8M12 4l-8 8" />
+          </svg>
+        </button>
       </div>
     </div>
   );
@@ -163,51 +237,68 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
     horizontal: 'right', 
     vertical: 'bottom' 
   });
+  const [isMobile, setIsMobile] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
-  const handleMouseLeave = useCallback(() => {
-    setActiveActivity(null);
+  // Detect mobile (below lg breakpoint)
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const handleActivityHover = useCallback((activityId: string, e: React.MouseEvent<HTMLSpanElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    
-    // Determine optimal horizontal position
-    // If text is in right half of screen, show card to the left
-    const textCenterX = rect.left + rect.width / 2;
-    const horizontal: 'left' | 'right' = textCenterX > viewportWidth / 2 ? 'left' : 'right';
-    
-    // Calculate x position
-    let x: number;
-    if (horizontal === 'right') {
-      x = rect.right + GAP;
-      // Ensure card doesn't go off right edge
-      if (x + CARD_WIDTH > viewportWidth - GAP) {
-        x = viewportWidth - CARD_WIDTH - GAP;
-      }
+  const handleMouseLeave = useCallback(() => {
+    if (!isMobile) {
+      setActiveActivity(null);
+    }
+  }, [isMobile]);
+
+  const handleActivityInteraction = useCallback((activityId: string, e: React.MouseEvent<HTMLSpanElement>) => {
+    if (isMobile) {
+      // Mobile: toggle modal
+      setActiveActivity((current) => current === activityId ? null : activityId);
     } else {
-      x = rect.left - GAP - CARD_WIDTH;
-      // Ensure card doesn't go off left edge
-      if (x < GAP) {
-        x = GAP;
+      // Desktop: position card near cursor
+      const rect = e.currentTarget.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      // Determine optimal horizontal position
+      const textCenterX = rect.left + rect.width / 2;
+      const horizontal: 'left' | 'right' = textCenterX > viewportWidth / 2 ? 'left' : 'right';
+      
+      // Calculate x position
+      let x: number;
+      if (horizontal === 'right') {
+        x = rect.right + GAP;
+        if (x + CARD_WIDTH > viewportWidth - GAP) {
+          x = viewportWidth - CARD_WIDTH - GAP;
+        }
+      } else {
+        x = rect.left - GAP - CARD_WIDTH;
+        if (x < GAP) {
+          x = GAP;
+        }
       }
+      
+      // Vertically center the card on the text
+      const textCenterY = rect.top + rect.height / 2;
+      let y = textCenterY - CARD_HEIGHT / 2;
+      
+      if (y < GAP) {
+        y = GAP;
+      } else if (y + CARD_HEIGHT > viewportHeight - GAP) {
+        y = viewportHeight - CARD_HEIGHT - GAP;
+      }
+      
+      setActiveActivity(activityId);
+      setCardPosition({ x, y, horizontal, vertical: 'bottom' });
     }
-    
-    // Vertically center the card on the text, with boundary protection
-    const textCenterY = rect.top + rect.height / 2;
-    let y = textCenterY - CARD_HEIGHT / 2;
-    
-    // Ensure card doesn't go off top or bottom edge
-    if (y < GAP) {
-      y = GAP;
-    } else if (y + CARD_HEIGHT > viewportHeight - GAP) {
-      y = viewportHeight - CARD_HEIGHT - GAP;
-    }
-    
-    setActiveActivity(activityId);
-    setCardPosition({ x, y, horizontal, vertical: 'bottom' });
+  }, [isMobile]);
+
+  const handleCloseModal = useCallback(() => {
+    setActiveActivity(null);
   }, []);
 
   useGSAP(
@@ -235,6 +326,8 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
     },
     { scope: sectionRef, dependencies: [prefersReducedMotion] }
   );
+
+  const activeActivityData = activities.find(a => a.id === activeActivity);
 
   return (
     <section
@@ -267,7 +360,8 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
             {activities.map((activity, index) => (
               <span key={activity.id}>
                 <span
-                  onMouseEnter={(e) => handleActivityHover(activity.id, e)}
+                  onClick={(e) => isMobile && handleActivityInteraction(activity.id, e)}
+                  onMouseEnter={(e) => !isMobile && handleActivityInteraction(activity.id, e)}
                   className="inline cursor-pointer text-heading transition-opacity duration-300 ease-out"
                   style={{
                     opacity: activeActivity === null 
@@ -295,19 +389,25 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
         </div>
       </div>
 
-      {/* Activity Card - rendered outside animated container for proper fixed positioning */}
-      {activeActivity && (
+      {/* Desktop: Fixed positioned card on hover */}
+      {!isMobile && activeActivityData && (
         <div
-          className="fixed w-72 md:w-80 z-50 pointer-events-none hidden lg:block"
+          className="fixed w-72 md:w-80 z-50 pointer-events-none"
           style={{
             left: cardPosition.x,
             top: cardPosition.y,
           }}
         >
-          {activities.find(a => a.id === activeActivity) && (
-            <ActivityCard activity={activities.find(a => a.id === activeActivity)!} />
-          )}
+          <ActivityCard activity={activeActivityData} />
         </div>
+      )}
+
+      {/* Mobile: Modal overlay on tap */}
+      {isMobile && activeActivityData && (
+        <ActivityModal 
+          activity={activeActivityData} 
+          onClose={handleCloseModal} 
+        />
       )}
     </section>
   );
