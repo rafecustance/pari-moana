@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { appendRegistration } from '@/lib/google-sheets';
 import { getPostHogClient } from '@/lib/posthog-server';
+import { sendMetaConversionEvent } from '@/lib/meta-capi';
 
 /**
  * Validate email format using a simple regex.
@@ -17,7 +18,14 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { email, utmCampaign } = body;
+    const { email, utmCampaign, eventId } = body;
+
+    // Extract user data for Meta CAPI
+    const userAgent = request.headers.get('user-agent') || undefined;
+    const ipAddress = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() 
+      || request.headers.get('x-real-ip') 
+      || undefined;
+    const referer = request.headers.get('referer') || undefined;
 
     // Validate email
     if (!email || typeof email !== 'string') {
@@ -70,6 +78,27 @@ export async function POST(request: NextRequest) {
         country,
       },
     });
+
+    // Send Lead event to Meta Conversion API (server-side)
+    // Uses same eventId as client-side pixel for deduplication
+    if (eventId) {
+      sendMetaConversionEvent({
+        eventName: 'Lead',
+        eventId,
+        userEmail: email.trim().toLowerCase(),
+        userAgent,
+        ipAddress,
+        countryCode: country,
+        eventSourceUrl: referer,
+        customData: {
+          content_name: 'Registration',
+          utm_campaign: utmCampaign || undefined,
+        },
+      }).catch((err) => {
+        // Log but don't fail the request if CAPI fails
+        console.error('Meta CAPI error:', err);
+      });
+    }
 
     return NextResponse.json(
       { success: true, message: 'Registration successful' },
