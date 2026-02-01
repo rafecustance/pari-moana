@@ -37,7 +37,7 @@ const basisGrotesque = localFont({
 });
 
 const SITE_URL = "https://www.parimoana.co.nz";
-const OG_IMAGE = "https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/hero/hero-a8sdjc.jpg";
+const OG_IMAGE = "https://assets.parimoana.co.nz/assets/hero/hero-a8sdjc.jpg";
 const SITE_TITLE = "Pari Moana | 360 Paremata Road, Pauatahanui";
 const SITE_DESCRIPTION = "A private architectural estate above the Pauatahanui Inlet, now offered for sale. 360 Paremata Road delivers refined indoor-outdoor living, established grounds and expansive water views.";
 

@@ -48,31 +48,31 @@ const structuredData = {
     longitude: 174.8872,
   },
   image:
-    "https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/hero/hero-a8sdjc.jpg",
+    "https://assets.parimoana.co.nz/assets/hero/hero-a8sdjc.jpg",
 };
 
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
       <Navigation />
       
       <main>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         {/* 1. ORIENTATION + ARRIVAL — Place, mood, video journey */}
         <HeroFull imageSrc={assetUrl('/assets/hero/hero-a8sdjc.jpg')} />
         <Introduction videoSrc={assetUrl('/assets/hero/video/hero-video-hac281d.mp4')} />
-        <Heritage imageSrc="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/architecture-2-hadsk.jpg" />
+        <Heritage imageSrc="https://assets.parimoana.co.nz/assets/imagery/architecture-2-hadsk.jpg" />
 
         {/* 2. LIVING — Connected indoor/outdoor spaces */}
         <Living 
           images={[
-            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living1-ahdks.jpg',
-            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living-2-adsasd.webp',
-            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living-5-ajdasd.webp', // placeholder for terrace
-            'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/living-6-oaidas.webp', // placeholder for fireplace at dusk
+            'https://assets.parimoana.co.nz/assets/imagery/living1-ahdks.jpg',
+            'https://assets.parimoana.co.nz/assets/imagery/living-2-adsasd.webp',
+            'https://assets.parimoana.co.nz/assets/imagery/living-5-ajdasd.webp', // placeholder for terrace
+            'https://assets.parimoana.co.nz/assets/imagery/living-6-oaidas.webp', // placeholder for fireplace at dusk
           // placeholder for evening interior
           ]}
         />
@@ -80,17 +80,17 @@ export default function HomePage() {
 
         {/* 4. RETREAT — Privacy and separation */}
         <Retreat 
-          primaryImage="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/retreat-1-asjda.webp"
-          secondaryImage="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/retreat-2-posda.webp"
+          primaryImage="https://assets.parimoana.co.nz/assets/imagery/retreat-1-asjda.webp"
+          secondaryImage="https://assets.parimoana.co.nz/assets/imagery/retreat-2-posda.webp"
         />
 
         {/* 5. GROUNDS — Outdoor extension of the home */}
         <Grounds 
           slides={[
-            { image: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-0.webp', alt: 'Established gardens' },
-            { image: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-4.webp', alt: 'Sheltered terrace' },
-            { image: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-2.webp', alt: 'Outdoor living space' },
-            { image: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-1.webp', alt: 'Garden pathway' },
+            { image: 'https://assets.parimoana.co.nz/assets/imagery/outdoor-0.webp', alt: 'Established gardens' },
+            { image: 'https://assets.parimoana.co.nz/assets/imagery/outdoor-4.webp', alt: 'Sheltered terrace' },
+            { image: 'https://assets.parimoana.co.nz/assets/imagery/outdoor-2.webp', alt: 'Outdoor living space' },
+            { image: 'https://assets.parimoana.co.nz/assets/imagery/outdoor-1.webp', alt: 'Garden pathway' },
           ]}
         />
 

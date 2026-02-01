@@ -191,7 +191,7 @@ interface EnquiryTeaserProps {
  * Creates a sense of rarity and invitation.
  */
 export function EnquiryTeaser({ 
-  imageSrc = 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/twilight-1.webp' 
+  imageSrc = 'https://assets.parimoana.co.nz/assets/imagery/twilight-1.webp' 
 }: EnquiryTeaserProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
