@@ -36,9 +36,49 @@ const basisGrotesque = localFont({
   display: "swap",
 });
 
+const SITE_URL = "https://www.parimoana.co.nz";
+const OG_IMAGE = "https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/hero/hero-a8sdjc.jpg";
+const SITE_TITLE = "Pari Moana | 360 Paremata Road, Pauatahanui";
+const SITE_DESCRIPTION = "A private architectural estate above the Pauatahanui Inlet, now offered for sale. 360 Paremata Road delivers refined indoor-outdoor living, established grounds and expansive water views.";
+
 export const metadata: Metadata = {
-  title: "Pari Moana",
-  description: "Where the sea meets the sky",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: "%s | Pari Moana",
+  },
+  description: SITE_DESCRIPTION,
+  keywords: ["Pari Moana", "360 Paremata Road", "Pauatahanui", "luxury home", "Porirua", "Wellington"],
+  authors: [{ name: "Team Group Realty" }],
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: "Pari Moana",
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Aerial view of Pari Moana estate above the Pauatahanui Inlet",
+      },
+    ],
+    locale: "en_NZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
 };
 
 export default function RootLayout({

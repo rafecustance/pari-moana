@@ -26,9 +26,38 @@ import { assetUrl } from '@/lib/assets';
  * 5. Connection — human scale beyond the gate
  * 6. Close — rarity and invitation, not urgency
  */
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "RealEstateListing",
+  name: "Pari Moana - 360 Paremata Road, Pauatahanui",
+  description:
+    "A private architectural estate above the Pauatahanui Inlet, now offered for sale. 360 Paremata Road delivers refined indoor-outdoor living, established grounds and expansive water views.",
+  url: "https://www.parimoana.co.nz",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "360 Paremata Road",
+    addressLocality: "Pauatahanui",
+    addressRegion: "Wellington",
+    postalCode: "5024",
+    addressCountry: "NZ",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: -41.1019,
+    longitude: 174.8872,
+  },
+  image:
+    "https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/hero/hero-a8sdjc.jpg",
+};
+
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <Navigation />
       
       <main>
