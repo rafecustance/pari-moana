@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import posthog from 'posthog-js';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 
 // Register ScrollTrigger
@@ -34,12 +35,20 @@ export function Introduction({ videoSrc, videoPoster }: IntroductionProps) {
 
   const togglePlay = () => {
     if (videoRef.current) {
+      const newState = !isPlaying;
+
       if (isPlaying) {
         videoRef.current.pause();
       } else {
         videoRef.current.play();
       }
-      setIsPlaying(!isPlaying);
+      setIsPlaying(newState);
+
+      // Track video playback toggle
+      posthog.capture('video_playback_toggled', {
+        action: newState ? 'play' : 'pause',
+        video_section: 'introduction',
+      });
     }
   };
 

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import posthog from 'posthog-js';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 
 // Register ScrollTrigger
@@ -255,6 +256,16 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
   }, [isMobile]);
 
   const handleActivityInteraction = useCallback((activityId: string, e: React.MouseEvent<HTMLSpanElement>) => {
+    // Track activity viewed event
+    const activity = activities.find(a => a.id === activityId);
+    if (activity && activeActivity !== activityId) {
+      posthog.capture('activity_viewed', {
+        activity_id: activityId,
+        activity_name: activity.name,
+        interaction_type: isMobile ? 'tap' : 'hover',
+      });
+    }
+
     if (isMobile) {
       // Mobile: toggle modal
       setActiveActivity((current) => current === activityId ? null : activityId);
@@ -295,7 +306,7 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
       setActiveActivity(activityId);
       setCardPosition({ x, y, horizontal, vertical: 'bottom' });
     }
-  }, [isMobile]);
+  }, [isMobile, activities, activeActivity]);
 
   const handleCloseModal = useCallback(() => {
     setActiveActivity(null);
