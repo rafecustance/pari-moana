@@ -363,13 +363,13 @@ function LocalConnectionInner({
             className="text-foreground text-base md:text-lg leading-relaxed mb-4"
             style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
           >
-            And while Pari Moana feels a world away, Pauatahanui Village is right on its doorstep: morning coffee, inlet walks, boutique movie house and friendly community.
+            And while Pari Moana feels a world away, Pāuatahanui Village is right on its doorstep; morning coffee, inlet walks, a boutique movie house and a friendly local community, with a wide range of outdoor activities close by.
           </p>
           <p 
             className="text-foreground text-base md:text-lg leading-relaxed"
             style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
           >
-            Wellington City, the Hutt Valley, and the Kapiti Coast are all within easy reach.
+            When you do need to venture further, Wellington City, the Hutt Valley and the Kāpiti Coast are all within easy reach.
           </p>
         </div>
 

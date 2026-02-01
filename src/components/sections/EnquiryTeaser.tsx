@@ -111,7 +111,7 @@ export function EnquiryTeaser({
         className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 py-24"
         style={{ opacity: prefersReducedMotion ? 1 : 0 }}
       >
-        <div id="register" className="max-w-2xl text-center scroll-mt-24 mt-16 md:mt-24">
+        <div id="register" className="max-w-2xl text-center scroll-mt-24 mt-32 md:mt-44">
           {/* Eyebrow */}
           <p 
             className="text-on-image/70 mb-4 uppercase tracking-widest"
@@ -121,12 +121,12 @@ export function EnquiryTeaser({
               fontFamily: 'var(--font-basis), system-ui, sans-serif',
             }}
           >
-            Open Homes Begin Soon
+            Open Homes Commencing Soon
           </p>
           
           {/* Statement */}
           <p 
-            className="font-display text-on-image mb-6"
+            className="font-display text-on-image mb-6 max-w-3xl mx-auto"
             style={{
               fontSize: 'clamp(1.75rem, 4vw, 2.75rem)',
               lineHeight: 1.35,
@@ -135,19 +135,21 @@ export function EnquiryTeaser({
               textShadow: '0 2px 40px rgba(0, 0, 0, 0.2)',
             }}
           >
-            Be the first to experience Pari Moana
+            Homes like this are seldom created and rarely offered.
           </p>
           
           {/* Supporting copy */}
           <p 
-            className="text-on-image/80 mb-10 max-w-md mx-auto"
+            className="text-on-image/80 mb-10 max-w-xl mx-auto"
             style={{
               fontSize: 'clamp(0.9375rem, 1.2vw, 1.0625rem)',
               lineHeight: 1.7,
               fontFamily: 'var(--font-basis), system-ui, sans-serif',
             }}
           >
-            Register your interest for priority access to private viewings and open home events.
+            Not simply a property to view, but a way of living to consider.
+            <br /><br />
+            Register to receive the full information pack and priority invitations to private viewings and upcoming open homes.
           </p>
 
           {/* Email capture form */}
@@ -173,7 +175,7 @@ export function EnquiryTeaser({
                 fontSize: '0.9375rem',
               }}
             >
-              Register
+              Register Interest
             </button>
           </form>
           
@@ -185,7 +187,7 @@ export function EnquiryTeaser({
               fontFamily: 'var(--font-basis), system-ui, sans-serif',
             }}
           >
-            We respect your privacy. Unsubscribe anytime.
+            We respect your privacy. Details shared only with the appointed agent.
           </p>
         </div>
       </div>

@@ -36,68 +36,56 @@ const defaultActivities: Activity[] = [
   {
     id: 'walking',
     name: 'Walking',
-    description: 'Explore coastal trails and native bush walks.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-1.webp',
+    description: 'Flat coastal tracks and boardwalks wind through wetlands, wildlife reserves, and village edges.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/walking.webp',
   },
   {
     id: 'cycling',
     name: 'Cycling',
-    description: 'Scenic road and trail cycling through rolling countryside.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-2.webp',
+    description: 'Easy, scenic paths follow the inlet edge; ideal for casual rides and longer loops.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/cycling.webp',
   },
   {
     id: 'kayaking',
     name: 'Kayaking',
-    description: 'Paddle the calm waters of Pauatahanui Inlet.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-0.webp',
+    description: 'Paddle calm, sheltered waters in the Pauatahanui Inlet; perfect for relaxed exploration year-round.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/kayaking.webp',
+  },
+  {
+    id: 'boating_water_sports',
+    name: 'Boating & Water Sports',
+    description: 'Sheltered waters suit boating, water skiing, and jet skiing, with easy access to nearby launch ramps.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/boating.webp',
   },
   {
     id: 'sailing',
     name: 'Sailing',
-    description: 'Access to Wellington Harbour and beyond.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-4.webp',
-  },
-  {
-    id: 'boating',
-    name: 'Boating',
-    description: 'Launch from nearby Mana Marina.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-0.webp',
-  },
-  {
-    id: 'swimming',
-    name: 'Swimming',
-    description: 'Sheltered beaches and tidal pools minutes away.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/retreat-1-asjda.webp',
+    description: 'Excellent conditions for dinghy sailing across all classes, supported by a strong local sailing community including Paremata Boating Club.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/sailing.webp',
   },
   {
     id: 'windsurfing',
     name: 'Windsurfing',
-    description: 'Catch the breeze on the inlet or harbour.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-2.webp',
-  },
-  {
-    id: 'jet-skiing',
-    name: 'Jet skiing',
-    description: 'Open water thrills on the Porirua Harbour.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-4.webp',
+    description: 'Steady breezes and open water at Motukaraka Point make it a favourite local windsurfing spot.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/windsufing.webp',
   },
   {
     id: 'golf',
     name: 'Golf',
-    description: 'Multiple championship courses within 20 minutes.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-1.webp',
+    description: 'Two established courses nearby offer relaxed play in a rural setting.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/golf.webp',
   },
   {
-    id: 'horse-riding',
-    name: 'Horse riding',
-    description: 'Rural trails and beach rides nearby.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-0.webp',
+    id: 'horse_riding',
+    name: 'Horse Riding',
+    description: 'Explore rolling farmland and historic trails at Battle Hill Farm Forest Park.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/horse-2.webp',
   },
   {
-    id: 'mountain-biking',
-    name: 'Mountain biking',
-    description: 'World-class trails at Makara Peak and beyond.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/outdoor-2.webp',
+    id: 'mountain_biking',
+    name: 'Mountain Biking',
+    description: 'Off-road trails through native bush and farmland sit just minutes away.',
+    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/mtb.webp',
   },
 ];
 
@@ -113,7 +101,7 @@ function ActivityCard({ activity }: ActivityCardProps) {
   return (
     <div
       className="
-        relative w-full max-w-md aspect-[4/5]
+        relative w-full max-w-md
         bg-[#F8F8F4] 
         rounded-lg
         shadow-2xl shadow-black/25
@@ -123,7 +111,7 @@ function ActivityCard({ activity }: ActivityCardProps) {
     >
       {/* Image */}
       {activity.imageSrc && (
-        <div className="relative w-full h-3/5">
+        <div className="relative w-full h-48">
           <Image
             src={activity.imageSrc}
             alt={activity.name}
@@ -136,12 +124,9 @@ function ActivityCard({ activity }: ActivityCardProps) {
       
       {/* Content */}
       <div className="p-6">
-        <h3 className="font-display text-2xl text-heading leading-tight">
-          {activity.name}
-        </h3>
         {activity.description && (
           <p 
-            className="mt-3 text-base text-foreground leading-relaxed"
+            className="text-base text-foreground leading-relaxed"
             style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
           >
             {activity.description}
@@ -254,7 +239,7 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
   return (
     <section
       ref={sectionRef}
-      className="bg-surface py-24 md:py-40"
+      className="bg-surface pt-0 pb-24 md:pb-40"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
         {/* Intro copy */}
@@ -327,4 +312,3 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
     </section>
   );
 }
-
