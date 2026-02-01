@@ -157,7 +157,7 @@ export function EnquiryTeaser({
           >
             <input
               type="email"
-              placeholder="Your email address"
+              placeholder="Email address"
               className="flex-1 px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-on-image placeholder:text-on-image/50 focus:outline-none focus:border-white/40 transition-colors duration-300"
               style={{ 
                 fontFamily: 'var(--font-basis), system-ui, sans-serif',
