@@ -16,3 +16,4 @@ export { EnquiryTeaser } from './EnquiryTeaser';
 export { Retreat } from './Retreat';
 export { Grounds } from './Grounds';
 export { LocalConnection } from './LocalConnection';
+export { Activities } from './Activities';
