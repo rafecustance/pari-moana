@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,6 +9,156 @@ import gsap from 'gsap';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 
 gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * Registration form component that uses useSearchParams.
+ * Wrapped in Suspense boundary for static generation compatibility.
+ */
+function RegistrationForm() {
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const utmCampaign = searchParams.get('utm_campaign');
+
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          utmCampaign,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
+      setIsSuccess(true);
+      setEmail('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isSuccess) {
+    return (
+      <div className="max-w-md mx-auto py-4 px-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl">
+        <p 
+          className="text-on-image"
+          style={{
+            fontFamily: 'var(--font-basis), system-ui, sans-serif',
+            fontSize: '0.9375rem',
+          }}
+        >
+          Thank you for registering. We&apos;ll be in touch soon.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <form 
+        className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+        onSubmit={handleSubmit}
+      >
+        <input
+          type="email"
+          placeholder="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={isLoading}
+          className="flex-1 px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-on-image placeholder:text-on-image/50 focus:outline-none focus:border-white/40 transition-colors duration-300 disabled:opacity-50"
+          style={{ 
+            fontFamily: 'var(--font-basis), system-ui, sans-serif',
+            fontSize: '0.9375rem',
+          }}
+          required
+        />
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="px-6 py-3 font-medium text-heading bg-on-image rounded-full hover:bg-white transition-colors duration-300 whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          style={{ 
+            fontFamily: 'var(--font-basis), system-ui, sans-serif',
+            fontSize: '0.9375rem',
+          }}
+        >
+          {isLoading ? (
+            <>
+              <svg 
+                className="animate-spin h-4 w-4" 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24"
+              >
+                <circle 
+                  className="opacity-25" 
+                  cx="12" 
+                  cy="12" 
+                  r="10" 
+                  stroke="currentColor" 
+                  strokeWidth="4"
+                />
+                <path 
+                  className="opacity-75" 
+                  fill="currentColor" 
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              <span>Registering...</span>
+            </>
+          ) : (
+            'Register Interest'
+          )}
+        </button>
+      </form>
+
+      {error && (
+        <p 
+          className="text-red-300 mt-4"
+          style={{
+            fontSize: '0.875rem',
+            fontFamily: 'var(--font-basis), system-ui, sans-serif',
+          }}
+        >
+          {error}
+        </p>
+      )}
+    </>
+  );
+}
+
+/**
+ * Loading fallback for the registration form.
+ */
+function RegistrationFormFallback() {
+  return (
+    <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <div 
+        className="flex-1 px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full h-12"
+      />
+      <div 
+        className="px-6 py-3 bg-on-image/70 rounded-full h-12 w-40"
+      />
+    </div>
+  );
+}
 
 interface EnquiryTeaserProps {
   imageSrc?: string;
@@ -150,32 +301,10 @@ export function EnquiryTeaser({
             Register to receive the full information pack and priority invitations to private viewings and upcoming open homes.
           </p>
 
-          {/* Email capture form */}
-          <form 
-            className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="email"
-              placeholder="Email address"
-              className="flex-1 px-5 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-on-image placeholder:text-on-image/50 focus:outline-none focus:border-white/40 transition-colors duration-300"
-              style={{ 
-                fontFamily: 'var(--font-basis), system-ui, sans-serif',
-                fontSize: '0.9375rem',
-              }}
-              required
-            />
-            <button
-              type="submit"
-              className="px-6 py-3 font-medium text-heading bg-on-image rounded-full hover:bg-white transition-colors duration-300 whitespace-nowrap"
-              style={{ 
-                fontFamily: 'var(--font-basis), system-ui, sans-serif',
-                fontSize: '0.9375rem',
-              }}
-            >
-              Register Interest
-            </button>
-          </form>
+          {/* Registration form wrapped in Suspense for static generation */}
+          <Suspense fallback={<RegistrationFormFallback />}>
+            <RegistrationForm />
+          </Suspense>
           
           {/* Privacy note */}
           <p 
