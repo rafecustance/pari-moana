@@ -48,7 +48,7 @@ const structuredData = {
     longitude: 174.8872,
   },
   image:
-    "https://assets.parimoana.co.nz/assets/hero/hero-a8sdjc.jpg",
+    "https://assets.parimoana.co.nz/assets/hero/360-paremata-road-pari-moana-hero.webp",
 };
 
 export default function HomePage() {
@@ -62,7 +62,7 @@ export default function HomePage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         {/* 1. ORIENTATION + ARRIVAL — Place, mood, video journey */}
-        <HeroFull imageSrc={assetUrl('/assets/hero/hero-a8sdjc.jpg')} />
+        <HeroFull imageSrc="https://assets.parimoana.co.nz/assets/hero/360-paremata-road-pari-moana-hero.webp" />
         <Introduction videoSrc={assetUrl('/assets/hero/video/hero-video-hac281d.mp4')} />
         <Heritage imageSrc="https://assets.parimoana.co.nz/assets/imagery/architecture-2-hadsk.jpg" />
 
@@ -96,7 +96,7 @@ export default function HomePage() {
 
         {/* 6. PLACE — Property scale and local connection */}
         <LocalConnection 
-          mapImageSrc={assetUrl('/assets/hero/hero-a8sdjc.jpg')}
+          imageSrc="https://assets.parimoana.co.nz/assets/hero/360-paremata-road-pari-moana-hero.webp"
           imageAlt="Aerial view of Pari Moana estate"
         />
 
