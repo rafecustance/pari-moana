@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from 'gsap';
+import posthog from 'posthog-js';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,17 +27,30 @@ function RegistrationForm() {
     setError(null);
     setIsLoading(true);
 
+    // Generate unique event ID for Meta deduplication between Pixel and CAPI
+    const eventId = crypto.randomUUID();
+
+    // Capture form submission event (before API call)
+    const utmCampaign = searchParams.get('utm_campaign');
+    posthog.capture('registration_form_submitted', {
+      email_domain: email.split('@')[1]?.toLowerCase(),
+      utm_campaign: utmCampaign || null,
+    });
+
     try {
-      const utmCampaign = searchParams.get('utm_campaign');
+      // Get PostHog distinct ID to pass to server for event correlation
+      const distinctId = posthog.get_distinct_id();
 
       const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-POSTHOG-DISTINCT-ID': distinctId || '',
         },
         body: JSON.stringify({
           email,
           utmCampaign,
+          eventId, // Pass to server for CAPI deduplication
         }),
       });
 
@@ -44,6 +58,13 @@ function RegistrationForm() {
 
       if (!response.ok) {
         throw new Error(data.error || 'Registration failed');
+      }
+
+      // Fire Meta Pixel Lead event on successful registration
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Lead', {
+          content_name: 'Registration',
+        }, { eventID: eventId });
       }
 
       setIsSuccess(true);
@@ -170,7 +191,7 @@ interface EnquiryTeaserProps {
  * Creates a sense of rarity and invitation.
  */
 export function EnquiryTeaser({ 
-  imageSrc = 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/imagery/twilight-1.webp' 
+  imageSrc = 'https://assets.parimoana.co.nz/assets/imagery/twilight-1.webp' 
 }: EnquiryTeaserProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);

@@ -6,6 +6,7 @@ import { motion, useMotionValue, useSpring, PanInfo } from 'framer-motion';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import posthog from 'posthog-js';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 
 // Register ScrollTrigger
@@ -162,8 +163,19 @@ function DesktopCarousel({ slides, prefersReducedMotion }: DesktopCarouselProps)
 
   const goToSlide = useCallback((index: number) => {
     const newIndex = Math.max(0, Math.min(slides.length - 1, index));
-    setCurrentSlide(newIndex);
-  }, [slides.length]);
+    if (newIndex !== currentSlide) {
+      setCurrentSlide(newIndex);
+
+      // Track carousel slide change
+      posthog.capture('carousel_slide_changed', {
+        carousel_section: 'grounds',
+        from_slide: currentSlide,
+        to_slide: newIndex,
+        total_slides: slides.length,
+        slide_alt: slides[newIndex]?.alt,
+      });
+    }
+  }, [slides, currentSlide]);
 
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {

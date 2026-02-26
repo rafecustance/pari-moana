@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import posthog from 'posthog-js';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 
 // Register ScrollTrigger
@@ -37,55 +38,55 @@ const defaultActivities: Activity[] = [
     id: 'walking',
     name: 'Walking',
     description: 'Flat coastal tracks and boardwalks wind through wetlands, wildlife reserves, and village edges.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/walking.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/walking.webp',
   },
   {
     id: 'cycling',
     name: 'Cycling',
     description: 'Easy, scenic paths follow the inlet edge; ideal for casual rides and longer loops.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/cycling.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/cycling.webp',
   },
   {
     id: 'kayaking',
     name: 'Kayaking',
     description: 'Paddle calm, sheltered waters in the Pauatahanui Inlet; perfect for relaxed exploration year-round.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/kayaking.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/kayaking.webp',
   },
   {
     id: 'boating_water_sports',
     name: 'Boating & Water Sports',
     description: 'Sheltered waters suit boating, water skiing, and jet skiing, with easy access to nearby launch ramps.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/boating.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/boating.webp',
   },
   {
     id: 'sailing',
     name: 'Sailing',
     description: 'Excellent conditions for dinghy sailing across all classes, supported by a strong local sailing community including Paremata Boating Club.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/sailing.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/sailing.webp',
   },
   {
     id: 'windsurfing',
     name: 'Windsurfing',
     description: 'Steady breezes and open water at Motukaraka Point make it a favourite local windsurfing spot.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/windsufing.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/windsufing.webp',
   },
   {
     id: 'golf',
     name: 'Golf',
     description: 'Two established courses nearby offer relaxed play in a rural setting.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/golf.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/golf.webp',
   },
   {
     id: 'horse_riding',
     name: 'Horse Riding',
     description: 'Explore rolling farmland and historic trails at Battle Hill Farm Forest Park.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/horse-2.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/horse-2.webp',
   },
   {
     id: 'mountain_biking',
     name: 'Mountain Biking',
     description: 'Off-road trails through native bush and farmland sit just minutes away.',
-    imageSrc: 'https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/activities/mtb.webp',
+    imageSrc: 'https://assets.parimoana.co.nz/assets/activities/mtb.webp',
   },
 ];
 
@@ -255,6 +256,16 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
   }, [isMobile]);
 
   const handleActivityInteraction = useCallback((activityId: string, e: React.MouseEvent<HTMLSpanElement>) => {
+    // Track activity viewed event
+    const activity = activities.find(a => a.id === activityId);
+    if (activity && activeActivity !== activityId) {
+      posthog.capture('activity_viewed', {
+        activity_id: activityId,
+        activity_name: activity.name,
+        interaction_type: isMobile ? 'tap' : 'hover',
+      });
+    }
+
     if (isMobile) {
       // Mobile: toggle modal
       setActiveActivity((current) => current === activityId ? null : activityId);
@@ -295,7 +306,7 @@ export function Activities({ activities = defaultActivities }: ActivitiesProps) 
       setActiveActivity(activityId);
       setCardPosition({ x, y, horizontal, vertical: 'bottom' });
     }
-  }, [isMobile]);
+  }, [isMobile, activities, activeActivity]);
 
   const handleCloseModal = useCallback(() => {
     setActiveActivity(null);

@@ -10,7 +10,7 @@ export function Footer() {
       <div className="content-wide py-4">
         <div className="flex items-center justify-between gap-6 flex-wrap">
           <Image
-            src="https://pub-0b3087ca60294f36ab0a9e41a9f08d99.r2.dev/assets/logos/Team%20Group%20Horizontal%20Navy.webp"
+            src="https://assets.parimoana.co.nz/assets/logos/Team%20Group%20Horizontal%20Navy.webp"
             alt="Team Group Realty"
             width={100}
             height={28}

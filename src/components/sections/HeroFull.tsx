@@ -117,6 +117,7 @@ export function HeroFull({
           }}
         >
           Pari Moana
+          <span className="sr-only"> — 360 Paremata Road, Pauatahanui</span>
         </h1>
       </div>
     </section>
