@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import posthog from 'posthog-js';
 
 /**
  * Floating CTA pill for Pari Moana.
@@ -84,21 +83,16 @@ export function Navigation() {
     <header className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
       <nav
         ref={pillRef}
-        className="opacity-0 rounded-full bg-background/95 backdrop-blur-md shadow-lg shadow-heading/5 border border-border/50"
+        className="opacity-0 flex items-center gap-3 rounded-full bg-heading/95 backdrop-blur-md shadow-lg shadow-heading/10 px-6 py-3"
         style={{ fontFamily: 'var(--font-basis), system-ui, sans-serif' }}
       >
-        <a
-          href="#register"
-          className="block px-6 py-3 text-sm font-medium text-on-image bg-heading rounded-full hover:bg-foreground transition-colors duration-300 whitespace-nowrap"
-          onClick={() => {
-            posthog.capture('navigation_cta_clicked', {
-              cta_text: 'Register Interest',
-              cta_destination: '#register',
-            });
-          }}
-        >
-          Register Interest
-        </a>
+        <span className="text-sm text-on-image/60 whitespace-nowrap hidden sm:inline">
+          Final open home
+        </span>
+        <span className="text-on-image/25 hidden sm:inline select-none">·</span>
+        <span className="text-sm text-on-image/90 whitespace-nowrap">
+          Sun 1 March, 11am
+        </span>
       </nav>
     </header>
   );
