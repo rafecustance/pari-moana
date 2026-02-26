@@ -8,4 +8,5 @@
 
 export { Navigation } from './Navigation';
 export { Footer } from './Footer';
+export { OpenHomeBanner } from './OpenHomeBanner';
 
